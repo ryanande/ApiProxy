@@ -1,0 +1,134 @@
+﻿@model IEnumerable<EdFiValidation.ApiProxy.Models.ApiLogModel>
+
+<div class="jumbotron">
+
+    <div class="row">
+        <div class="col-md-7">
+            <h1>Validation Proxy</h1>
+            <p class="lead">Ed-Fi REST API Validation Proxy Query Tool</p>
+        </div>
+        <div class="col-md-5">
+            <br /><br /><br />
+            <form role="form" class="form-inline">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Session Id..." />
+                    <button type="button" class="btn btn-info">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="panel-group" id="accordion">
+    @foreach (var logItem in Model)
+    {
+
+        <div class="panel panel-primary">
+
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" href="#@(logItem.Id)_trans">
+                    <span class="label @(@logItem.ApiResponse.IsSuccessStatusCode ? "label-success" : "label-danger")"> @logItem.ApiRequest.HttpMethod</span>
+                </a>
+
+                <strong>TRANSACTION:</strong> @logItem.ApiResponse.RequestPath()
+                <span class="pull-right"><small>@logItem.LogDate</small></span>
+            </div>
+
+            <div id="@(logItem.Id)_trans" class="panel-collapse collapse in">
+                <div class="panel-body">
+
+                    <!-- Main Body -->
+                    <div class="panel-group" id="@(logItem.Id)_accordion">
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h4 class="panel-title wrap">
+
+                                    <a data-toggle="collapse" data-parent="#@(logItem.Id)_accordion" href="#@(logItem.Id)_req" class="collapsed">
+                                        <strong>REQUEST</strong>
+                                    </a>
+
+                                </h4>
+                            </div>
+                            <div id="@(logItem.Id)_req" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12 wrap">
+                                            <h4>URL</h4>
+                                            @logItem.ApiRequest.UriAccessed
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h4>Headers</h4>
+                                            <ul class="list-group wrap">
+                                                @foreach (var header in logItem.ApiRequest.Headers)
+                                                {
+                                                    <li class="list-group-item"><strong>@header.Key:</strong> @header.Value</li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <strong>Body</strong>
+                                            <pre class="pre-scrollable">@logItem.ApiRequest.BodyContent</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="panel  @(@logItem.ApiResponse.IsSuccessStatusCode ? "panel-success" : "panel-danger")">
+                            <div class="panel-heading">
+                                <h4 class="panel-title wrap">
+
+                                    <a data-toggle="collapse" data-parent="#@(logItem.Id)_accordion" href="#@(logItem.Id)_res" class="collapsed">
+                                        <strong>RESPONSE</strong>
+                                    </a>
+                                    <span class="pull-right">
+                                        <strong>@logItem.ApiResponse.ResponseStatusCode:</strong> @logItem.ApiResponse.ResponseStatusMessage
+                                    </span>
+                                </h4>
+                            </div>
+                            <div id="@(logItem.Id)_res" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-md-12 wrap">
+                                            <h4>URL</h4>
+                                            @logItem.ApiResponse.UriAccessed
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h4>Headers</h4>
+                                            <ul class="list-group">
+                                                @foreach (var header in logItem.ApiResponse.Headers)
+                                                {
+                                                    <li class="list-group-item"><strong>@header.Key:</strong> @header.Value</li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong>Body</strong>
+                                            <pre class="pre-scrollable">@logItem.ApiResponse.BodyContent</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Main Body -->
+                </div>
+            </div>
+        </div>
+    }
+</div>
