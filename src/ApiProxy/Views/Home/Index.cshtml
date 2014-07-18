@@ -54,20 +54,25 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-md-12 wrap">
-                                            <h4>URL</h4>
-                                            @logItem.ApiRequest.UriAccessed
+                                            <strong>URL</strong>
+                                            <div class="alert alert-warning">
+                                                @logItem.ApiRequest.UriAccessed
+                                            </div>
                                         </div>
                                     </div>
-
+                                    <br/>
                                     <div class="row">
                                         <div class="col-md-8">
-                                            <h4>Headers</h4>
-                                            <ul class="list-group wrap">
-                                                @foreach (var header in logItem.ApiRequest.Headers)
-                                                {
-                                                    <li class="list-group-item"><strong>@header.Key:</strong> @header.Value</li>
-                                                }
-                                            </ul>
+                                            <strong>Headers</strong>
+                                            <div class="alert alert-warning">
+                                                <dl>
+                                                    @foreach (var header in logItem.ApiRequest.Headers)
+                                                    {
+                                                        <dt>@header.Key:</dt>
+                                                        <dd>@header.Value</dd>
+                                                    }
+                                                </dl>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -79,7 +84,6 @@
                                 </div>
                             </div>
                         </div>
-
 
 
                         <div class="panel  @(@logItem.ApiResponse.IsSuccessStatusCode ? "panel-success" : "panel-danger")">
@@ -96,24 +100,27 @@
                             </div>
                             <div id="@(logItem.Id)_res" class="panel-collapse collapse">
                                 <div class="panel-body">
-
                                     <div class="row">
                                         <div class="col-md-12 wrap">
-                                            <h4>URL</h4>
-                                            @logItem.ApiResponse.UriAccessed
+                                            <strong>URL</strong>
+                                            <div class="alert alert-warning">
+                                                @logItem.ApiRequest.UriAccessed
+                                            </div>
                                         </div>
                                     </div>
-
-
+                                    <br/>
                                     <div class="row">
                                         <div class="col-md-8">
-                                            <h4>Headers</h4>
-                                            <ul class="list-group">
-                                                @foreach (var header in logItem.ApiResponse.Headers)
-                                                {
-                                                    <li class="list-group-item"><strong>@header.Key:</strong> @header.Value</li>
-                                                }
-                                            </ul>
+                                            <strong>Headers</strong>
+                                            <div class="alert alert-warning">
+                                                <dl>
+                                                    @foreach (var header in logItem.ApiResponse.Headers)
+                                                    {
+                                                        <dt>@header.Key:</dt>
+                                                        <dd>@header.Value</dd>
+                                                    }
+                                                </dl>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
