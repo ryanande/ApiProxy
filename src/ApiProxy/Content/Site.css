@@ -44,3 +44,16 @@ textarea {
     word-wrap: break-word;
     word-break: break-word;
 }
+
+
+
+
+.panel-heading a:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\e114";    
+    float: left; 
+    color: #404040; 
+}
+.panel-heading a.collapsed:after {
+    content: "\e080";
+}

@@ -22,49 +22,52 @@
 <div class="panel-group" id="accordion">
     @foreach (var logItem in Model)
     {
-
+        <!-- Trans Panel -->
         <div class="panel panel-primary">
 
             <div class="panel-heading">
-                <a data-toggle="collapse" data-parent="#accordion" href="#@(logItem.Id)_trans">
-                    <span class="label @(@logItem.ApiResponse.IsSuccessStatusCode ? "label-success" : "label-danger")"> @logItem.ApiRequest.HttpMethod</span>
-                </a>
+                <div class="row">
 
-                <strong>TRANSACTION:</strong> @logItem.ApiResponse.RequestPath()
-                <span class="pull-right"><small>@logItem.LogDate</small></span>
+                    <div class="col-md-2">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#@(logItem.Id)_trans">
+                        </a> &nbsp;
+                        <span class="label @(@logItem.ApiResponse.IsSuccessStatusCode ? "label-success" : "label-danger")"> @logItem.ApiRequest.HttpMethod</span>
+                    </div>
+                    <div class="col-md-8">
+                        <strong> @logItem.ApiResponse.RequestPath()</strong>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="pull-right"><small>@logItem.LogDate</small></span>
+                    </div>
+                </div>
             </div>
 
             <div id="@(logItem.Id)_trans" class="panel-collapse collapse in">
                 <div class="panel-body">
-
                     <!-- Main Body -->
                     <div class="panel-group" id="@(logItem.Id)_accordion">
-
+                        <!-- REQUEST -->
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <h4 class="panel-title wrap">
-
-                                    <a data-toggle="collapse" data-parent="#@(logItem.Id)_accordion" href="#@(logItem.Id)_req" class="collapsed">
-                                        <strong>REQUEST</strong>
-                                    </a>
-
-                                </h4>
+                                &nbsp;
+                                <a data-toggle="collapse" data-parent="#@(logItem.Id)_accordion" href="#@(logItem.Id)_req" class="collapsed"></a>
+                                <strong>REQUEST</strong>
                             </div>
                             <div id="@(logItem.Id)_req" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-md-12 wrap">
                                             <strong>URL</strong>
-                                            <div class="alert alert-warning">
+                                            <div class="well">
                                                 @logItem.ApiRequest.UriAccessed
                                             </div>
                                         </div>
                                     </div>
-                                    <br/>
+                                    <br />
                                     <div class="row">
                                         <div class="col-md-8">
                                             <strong>Headers</strong>
-                                            <div class="alert alert-warning">
+                                            <div class="well">
                                                 <dl>
                                                     @foreach (var header in logItem.ApiRequest.Headers)
                                                     {
@@ -84,35 +87,32 @@
                                 </div>
                             </div>
                         </div>
-
-
+                        <!-- /REQUEST -->
+                        <!-- RESPONSE -->
                         <div class="panel  @(@logItem.ApiResponse.IsSuccessStatusCode ? "panel-success" : "panel-danger")">
                             <div class="panel-heading">
-                                <h4 class="panel-title wrap">
-
-                                    <a data-toggle="collapse" data-parent="#@(logItem.Id)_accordion" href="#@(logItem.Id)_res" class="collapsed">
-                                        <strong>RESPONSE</strong>
-                                    </a>
-                                    <span class="pull-right">
-                                        <strong>@logItem.ApiResponse.ResponseStatusCode:</strong> @logItem.ApiResponse.ResponseStatusMessage
-                                    </span>
-                                </h4>
+                                &nbsp;
+                                <a data-toggle="collapse" data-parent="#@(logItem.Id)_accordion" href="#@(logItem.Id)_res" class="collapsed"></a>
+                                <strong>RESPONSE</strong>
+                                <span class="pull-right">
+                                    <strong>@logItem.ApiResponse.ResponseStatusCode:</strong> @logItem.ApiResponse.ResponseStatusMessage
+                                </span>
                             </div>
                             <div id="@(logItem.Id)_res" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-md-12 wrap">
                                             <strong>URL</strong>
-                                            <div class="alert alert-warning">
-                                                @logItem.ApiRequest.UriAccessed
+                                            <div class="well">
+                                                @logItem.ApiResponse.UriAccessed
                                             </div>
                                         </div>
                                     </div>
-                                    <br/>
+                                    <br />
                                     <div class="row">
                                         <div class="col-md-8">
                                             <strong>Headers</strong>
-                                            <div class="alert alert-warning">
+                                            <div class="well">
                                                 <dl>
                                                     @foreach (var header in logItem.ApiResponse.Headers)
                                                     {
@@ -132,10 +132,12 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /RESPONSE -->
                     </div>
-                    <!-- / Main Body -->
+                    <!-- /Main Body -->
                 </div>
             </div>
         </div>
+        <!-- /Trans Panel -->
     }
 </div>

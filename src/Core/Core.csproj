@@ -72,6 +72,7 @@
     <Compile Include="Queries\ApiLogItemQueryService.cs" />
     <Compile Include="Queries\IApiLogItemQueryService.cs" />
     <Compile Include="Services\ApiRequestProcessor.cs" />
+    <Compile Include="Services\IApiRequestProcessor.cs" />
     <Compile Include="Utility\IApiTransactionUtility.cs" />
     <Compile Include="Utility\ApiTransactionUtility.cs" />
     <Compile Include="Utility\IConfig.cs" />

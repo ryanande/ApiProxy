@@ -6,13 +6,6 @@ using System.Net.Http;
 
 namespace EdFiValidation.ApiProxy.Core.Services
 {
-    public interface IApiRequestProcessor
-    {
-        HttpResponseMessage Execute(HttpRequestMessage request, string[] urlSegments);
-
-    }
-
-
     public class ApiRequestProcessor : IApiRequestProcessor
     {
         private readonly IApiTransactionUtility _apiTransactionUtility;
@@ -33,12 +26,13 @@ namespace EdFiValidation.ApiProxy.Core.Services
                 ApiRequest = _apiTransactionUtility.BuildApiRequest(request)
             };
 
-            var uri = _apiTransactionUtility.BuildDestinationUri(request.RequestUri);
-            request.RequestUri = uri;
-
+            // HttpClient and WebRequest objs both bark when GET w/ body content
             if (request.Method.Method.ToUpper() == "GET")
                 request.Content = null;
 
+            // reset the request URI to the decoded path
+            var uri = _apiTransactionUtility.BuildDestinationUri(request.RequestUri);
+            request.RequestUri = uri;
 
             using (var client = new HttpClient())
             {
@@ -46,6 +40,9 @@ namespace EdFiValidation.ApiProxy.Core.Services
 
                 var response = client.SendAsync(request).Result;
                 apiLog.ApiResponse = _apiTransactionUtility.BuildApiResponse(response);
+
+                // why we have to reset this? (comes in as localhost if not)
+                apiLog.ApiResponse.UriAccessed = uri.OriginalString;
 
                 _commandHandler.Handle(apiLog); // async could be nice
 
