@@ -5,6 +5,6 @@ namespace EdFiValidation.ApiProxy.Core.Queries
 {
     public interface IApiLogItemQueryService
     {
-        IEnumerable<RequestResponsePair> GetSessionItems(string sessionId);
+        IEnumerable<RequestResponsePair> GetOnSessionId(string sessionId);
     }
 }

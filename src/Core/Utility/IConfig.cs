@@ -6,6 +6,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
     {
         int SessionIdSegmentIndex { get; }
         int DestinationUrlSegementIndex { get; }
+        string ProxyDbConnectionString { get; }
     }
 
     public class Config : IConfig
@@ -26,6 +27,18 @@ namespace EdFiValidation.ApiProxy.Core.Utility
                 int segmentIndex;
                 int.TryParse(ConfigurationManager.AppSettings["DestinationUrlSegementIndex"], out segmentIndex); // static ref (abstract it?)
                 return segmentIndex;
+            }
+        }
+
+        public string ProxyDbConnectionString
+        {
+            get
+            {
+                var connectionString = ConfigurationManager.ConnectionStrings["ProxyDbConnectionString"];
+                if (connectionString == null || string.IsNullOrWhiteSpace(connectionString.ConnectionString))
+                    throw new ConfigurationErrorsException("ProxyDbConnectionString is required in the configuration.");
+
+                return connectionString.ConnectionString;
             }
         }
     }

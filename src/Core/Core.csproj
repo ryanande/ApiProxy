@@ -61,16 +61,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CreateApiLogItem.cs" />
+    <Compile Include="Utility\CombGuid.cs" />
     <Compile Include="Models\ApiRequest.cs" />
     <Compile Include="Models\ApiResponse.cs" />
     <Compile Include="Models\ApiTransaction.cs" />
     <Compile Include="Dependencies\CoreRegistry.cs" />
     <Compile Include="Handlers\ApiLogItemCommandHandler.cs" />
     <Compile Include="Handlers\ICommandHandler.cs" />
+    <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\RequestResponsePair.cs" />
+    <Compile Include="Models\UseCase.cs" />
+    <Compile Include="Models\UseCaseItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\ApiLogItemQueryService.cs" />
     <Compile Include="Queries\IApiLogItemQueryService.cs" />
+    <Compile Include="Queries\IUseCaseQueryService.cs" />
+    <Compile Include="Queries\UseCaseQueryService.cs" />
     <Compile Include="Services\ApiRequestProcessor.cs" />
     <Compile Include="Services\IApiRequestProcessor.cs" />
     <Compile Include="Utility\IApiTransactionUtility.cs" />

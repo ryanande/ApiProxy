@@ -113,8 +113,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
 
         public Uri BuildDestinationUri(Uri uri)
         {
-            // the 2 represents the segment used for intent (sessionId for example)
-            var path = uri.Segments.Skip(4).Aggregate((m, n) => m.Replace("/", "") + "/" + n);
+            var path = uri.Segments.Skip(4).Aggregate((m, n) => m + n.Replace("/", "") + "/");
 
       
             // decode url, should be second item in array

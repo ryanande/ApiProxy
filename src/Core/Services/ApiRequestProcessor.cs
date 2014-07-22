@@ -43,6 +43,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
 
                 // why we have to reset this? (comes in as localhost if not)
                 apiLog.ApiResponse.UriAccessed = uri.OriginalString;
+                apiLog.ApiResponse.IsSuccessStatusCode = response.IsSuccessStatusCode;
 
                 _commandHandler.Handle(apiLog); // async could be nice
 

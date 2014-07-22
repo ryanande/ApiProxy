@@ -1,8 +1,8 @@
 ﻿using EdFiValidation.ApiProxy.Core.Models;
+using EdFiValidation.ApiProxy.Core.Utility;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 
 namespace EdFiValidation.ApiProxy.Core.Queries
@@ -10,9 +10,10 @@ namespace EdFiValidation.ApiProxy.Core.Queries
     public class ApiLogItemQueryService : IApiLogItemQueryService
     {
         private readonly MongoCollection<RequestResponsePair> _collection;
-        public ApiLogItemQueryService()
+        public ApiLogItemQueryService(IConfig config)
         {
-            var url = GetConnectionString("ProxyDbConnectionString");
+
+            var url = MongoUrl.Create(config.ProxyDbConnectionString);
             var db = new MongoClient(url)
                 .GetServer()
                 .GetDatabase(url.DatabaseName);
@@ -21,16 +22,11 @@ namespace EdFiValidation.ApiProxy.Core.Queries
         }
 
 
-        public IEnumerable<RequestResponsePair> GetSessionItems(string sessionId)
+        public IEnumerable<RequestResponsePair> GetOnSessionId(string sessionId)
         {
             return _collection.AsQueryable().Where(l => l.SessionId == sessionId); // this should expand to include paging and possibly filtering
         }
 
 
-        private static MongoUrl GetConnectionString(string connectionStringName)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings[connectionStringName];
-            return MongoUrl.Create(connectionString != null ? connectionString.ConnectionString : connectionStringName);
-        }
     }
 }

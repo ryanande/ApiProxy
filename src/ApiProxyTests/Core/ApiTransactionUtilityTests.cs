@@ -14,7 +14,7 @@ namespace EdFiValidation.ApiProxyTests.Core
         public void GetDestination_Properly_Decodes_String()
         {
             // arrange
-            var expected = new Uri("https://www.google.com/");
+            var expected = "https://www.google.com/";
 
             var config = Stub<IConfig>();
 

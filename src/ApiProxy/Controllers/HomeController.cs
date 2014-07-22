@@ -20,7 +20,7 @@ namespace EdFiValidation.ApiProxy.Controllers
             if (string.IsNullOrWhiteSpace(sessionId))
                 return View(new List<ApiLogModel>());
 
-            var transactions = _apiLogItemQueryService.GetSessionItems(sessionId);
+            var transactions = _apiLogItemQueryService.GetOnSessionId(sessionId);
             var model = Mapper.Map<List<ApiLogModel>>(transactions);
             return View(model);
         }
