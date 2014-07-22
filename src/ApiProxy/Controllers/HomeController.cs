@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Web.Http;
+using AutoMapper;
 using EdFiValidation.ApiProxy.Core.Queries;
 using EdFiValidation.ApiProxy.Models;
 using System.Collections.Generic;
@@ -15,7 +16,14 @@ namespace EdFiValidation.ApiProxy.Controllers
         }
 
 
-        public ActionResult Index(string sessionId = "")
+        [System.Web.Mvc.HttpGet]
+        public ActionResult Index()
+        {
+            return View(new List<ApiLogModel>());
+        }
+
+        [System.Web.Mvc.HttpPost]
+        public ActionResult Index([FromBody]string sessionId)
         {
             if (string.IsNullOrWhiteSpace(sessionId))
                 return View(new List<ApiLogModel>());
