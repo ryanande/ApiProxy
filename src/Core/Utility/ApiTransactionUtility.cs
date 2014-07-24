@@ -132,6 +132,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
             // the 4 represents the segment used for the final destination endpoint
             string destinationPath = uri.Segments.Skip(4).Aggregate((m, n) => m + n);
             // decode url, should be fourth segment in the incoming uri
+
             var destinationRoot = ExtractDestination(uri);
 
             UriBuilder destinationUri;
