@@ -2,7 +2,7 @@
 
 namespace EdFiValidation.ApiProxy.Core.Commands
 {
-    public class CreateSesssionUseCaseSuccess : ICommand
+    public class CreateUseCaseValidation : ICommand
     {
         public Guid Id { get; set; }
     }
