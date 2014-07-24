@@ -92,9 +92,8 @@ namespace EdFiValidation.ApiProxy.Core.Utility
 
         public string ExtractDestination(Uri uri)
         {
-            if (uri.Segments.Count() - 1 < _config.DestinationUrlSegementIndex || _config.DestinationUrlSegementIndex < 0)
-                return null; // we may want to throw a custom exception here...
-
+            if (_config.DestinationUrlSegementIndex < 0)
+                throw new InvalidConfigurationValueException("Invalid DestinationUrlSegementIndex value in ApiTransactionUtility._config: {0}", _config.DestinationUrlSegementIndex);
 
             var dest = uri.Segments[_config.DestinationUrlSegementIndex].Replace("/", "");
             dest = WebUtility.UrlDecode(dest);
@@ -105,35 +104,48 @@ namespace EdFiValidation.ApiProxy.Core.Utility
 
         public string DecodeDestination(string encodedUrl)
         {
-            byte[] data = Convert.FromBase64String(encodedUrl);
-            string decodedUrl = Encoding.UTF8.GetString(data);
+            string decodedUrl;
+            try
+            {
+                byte[] data = Convert.FromBase64String(encodedUrl);
+                decodedUrl = Encoding.UTF8.GetString(data);
+            }
+            catch (FormatException ex)
+            {
+                throw new CannotParseUriException("Error trying to decode destination url from Base-64 format. " + ex.Message);
+            }
+           
             return decodedUrl;
         }
 
 
         public Uri BuildDestinationUri(Uri uri)
         {
-            string destinationPath;
-            try
+            if (uri.Segments.Count() - 1 < _config.DestinationUrlSegementIndex)
             {
-                // the 4 represents the segment used for the final destination endpoint
-                destinationPath = uri.Segments.Skip(4).Aggregate((m, n) => m + n);
+                throw new CannotParseUriException(
+                    "Error parsing URI. Not enough URI segments. {0} detected. At least {1} required. " + CannotParseUriException.ExpectedFormatMsg,
+                    uri.Segments.Count(), _config.DestinationUrlSegementIndex + 1);
             }
-            catch (System.InvalidOperationException)
-            {
-                throw new CannotParseUriException("Not enough URI segments. {0} detected. At least {1} required.",
-                                                  uri.Segments.Count(), 5); //this smells. Is there a way we can calculte the required segments? 
-            }
-            // foo.com/api/{sessionId}/{EncodedDestination}/{clientId}/{DistionationAction}/{id}/...  becomes   {clientId}/{DistionationAction?}/{id}/...
 
+            // the 4 represents the segment used for the final destination endpoint
+            string destinationPath = uri.Segments.Skip(4).Aggregate((m, n) => m + n);
             // decode url, should be fourth segment in the incoming uri
-
             var rootDestination = ExtractDestination(uri);
 
-            var uriBuilder = new UriBuilder(rootDestination)
+            UriBuilder uriBuilder;
+            try
+            {
+                 uriBuilder = new UriBuilder(rootDestination)
                 {
                     Path = destinationPath
                 };
+            }
+            catch (UriFormatException ex)
+            {
+                throw new CannotParseUriException("Decoded destination uri was invalid. " + ex.Message);
+            }
+            
 
             if (!string.IsNullOrWhiteSpace(uri.Query))
                 uriBuilder.Query = uri.Query.Replace("?", "");
