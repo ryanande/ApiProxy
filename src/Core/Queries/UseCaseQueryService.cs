@@ -18,7 +18,7 @@ namespace EdFiValidation.ApiProxy.Core.Queries
                 .GetServer()
                 .GetDatabase(url.DatabaseName);
 
-            _collection = db.GetCollection<UseCase>("RequestResponsePair");
+            _collection = db.GetCollection<UseCase>();
         }
 
 

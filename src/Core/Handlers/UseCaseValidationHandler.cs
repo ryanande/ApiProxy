@@ -7,21 +7,27 @@ namespace EdFiValidation.ApiProxy.Core.Handlers
 {
     class UseCaseValidationHandler : ICommandHandler<CreateUseCaseValidation>
     {
-        private readonly MongoCollection<UseCaseValidation> _collection;
+        private readonly MongoDatabase _db;
 
         public UseCaseValidationHandler(IConfig config)
         {
             var url = new MongoUrl(config.ProxyDbConnectionString);
-            var db = new MongoClient(url)
+            _db = new MongoClient(url)
                 .GetServer()
                 .GetDatabase(url.DatabaseName);
 
-            _collection = db.GetCollection<UseCaseValidation>("UseCaseValidation");
+            
         }
 
         public void Handle(CreateUseCaseValidation command)
         {
-            //TODO: create UseCaseValidation object and save
+            var useCaseValidation = new UseCaseValidation
+            {
+
+            };
+
+            var collection = _db.GetCollection<UseCaseValidation>();
+            collection.Save(useCaseValidation);
         }
     }
 }

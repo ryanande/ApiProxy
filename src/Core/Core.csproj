@@ -80,6 +80,7 @@
     <Compile Include="Utility\IApiTransactionUtility.cs" />
     <Compile Include="Utility\ApiTransactionUtility.cs" />
     <Compile Include="Utility\IConfig.cs" />
+    <Compile Include="Utility\MongoExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

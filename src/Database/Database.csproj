@@ -67,6 +67,7 @@
     <Compile Include="Data\UseCaseDataList.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="DependencyInjection\ProgramRegistry.cs" />
+    <Compile Include="MongoExtensions.cs" />
     <Compile Include="Update\IUpdateTask.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="PopulationAction.cs" />

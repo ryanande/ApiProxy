@@ -18,7 +18,7 @@ namespace EdFiValidation.ApiProxy.Core.Queries
                 .GetServer()
                 .GetDatabase(url.DatabaseName);
 
-            _collection = db.GetCollection<RequestResponsePair>("RequestResponsePair");
+            _collection = db.GetCollection<RequestResponsePair>();
         }
 
 
@@ -26,7 +26,5 @@ namespace EdFiValidation.ApiProxy.Core.Queries
         {
             return _collection.AsQueryable().Where(l => l.SessionId == sessionId).ToList(); // this should expand to include paging and possibly filtering
         }
-
-
     }
 }
