@@ -7,10 +7,10 @@ using System.Linq;
 
 namespace EdFiValidation.ApiProxy.Core.Queries
 {
-    public class ApiLogItemQueryService : IApiLogItemQueryService
+    public class RequestResponsePairQueryService : IRequestResponsePairQueryService
     {
         private readonly MongoCollection<RequestResponsePair> _collection;
-        public ApiLogItemQueryService(IConfig config)
+        public RequestResponsePairQueryService(IConfig config)
         {
 
             var url = MongoUrl.Create(config.ProxyDbConnectionString);
@@ -24,7 +24,7 @@ namespace EdFiValidation.ApiProxy.Core.Queries
 
         public IEnumerable<RequestResponsePair> GetOnSessionId(string sessionId)
         {
-            return _collection.AsQueryable().Where(l => l.SessionId == sessionId); // this should expand to include paging and possibly filtering
+            return _collection.AsQueryable().Where(l => l.SessionId == sessionId).ToList(); // this should expand to include paging and possibly filtering
         }
 
 

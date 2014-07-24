@@ -9,10 +9,10 @@ namespace EdFiValidation.ApiProxy.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IApiLogItemQueryService _apiLogItemQueryService;
-        public HomeController(IApiLogItemQueryService apiLogItemQueryService)
+        private readonly IRequestResponsePairQueryService _requestResponsePairQueryService;
+        public HomeController(IRequestResponsePairQueryService requestResponsePairQueryService)
         {
-            _apiLogItemQueryService = apiLogItemQueryService;
+            _requestResponsePairQueryService = requestResponsePairQueryService;
         }
 
 
@@ -28,7 +28,7 @@ namespace EdFiValidation.ApiProxy.Controllers
             if (string.IsNullOrWhiteSpace(sessionId))
                 return View(new List<ApiLogModel>());
 
-            var transactions = _apiLogItemQueryService.GetOnSessionId(sessionId);
+            var transactions = _requestResponsePairQueryService.GetOnSessionId(sessionId);
             var model = Mapper.Map<List<ApiLogModel>>(transactions);
             return View(model);
         }

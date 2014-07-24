@@ -24,8 +24,14 @@ namespace EdFiValidation.ApiProxy.Core.Queries
 
         public IEnumerable<UseCase> GetOnId(Guid useCaseId)
         {
-            return _collection.AsQueryable().Where(l => l.Id == useCaseId); // this should expand to include paging and possibly filtering
+            return _collection.AsQueryable().Where(l => l.Id == useCaseId).ToList(); // this should expand to include paging and possibly filtering
         }
 
+
+
+        public IEnumerable<UseCase> GetAll()
+        {
+            return _collection.AsQueryable().ToList();
+        }
     }
 }

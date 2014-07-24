@@ -4,6 +4,7 @@ namespace EdFiValidation.ApiProxy.Core.Models
 {
     public class RequestResponsePair : ModelBase
     {
+        public Guid ClientId { get; set; }
         public DateTime LogDate { get; set; }
         public string SessionId { get; set; }
         public ApiRequest ApiRequest { get; set; }

@@ -8,7 +8,7 @@ namespace EdFiValidation.ApiProxy.Core.Dependencies
     {
         public CoreRegistry()
         {
-            For<IApiLogItemQueryService>().Use<ApiLogItemQueryService>();
+            For<IRequestResponsePairQueryService>().Use<RequestResponsePairQueryService>();
             For<IConfig>().Use<Config>();
         }
     }
