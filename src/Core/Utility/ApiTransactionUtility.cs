@@ -93,7 +93,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
         public string ExtractDestination(Uri uri)
         {
             if (uri.Segments.Count() - 1 < _config.DestinationUrlSegementIndex || _config.DestinationUrlSegementIndex < 0)
-                return null; // we may want to throw a custom exception here....
+                return null; // we may want to throw a custom exception here...
 
 
             var dest = uri.Segments[_config.DestinationUrlSegementIndex].Replace("/", "");
@@ -113,11 +113,21 @@ namespace EdFiValidation.ApiProxy.Core.Utility
 
         public Uri BuildDestinationUri(Uri uri)
         {
-            // the 2 represents the segment used for intent (sessionId for example)
-            var destinationPath = uri.Segments.Skip(4).Aggregate((m, n) => m + n);  //was ((m, n) => m.Replace("/", "") + "/" + n). This was dropping the '/' btwn clientId and destination action.   Not sure what the intent was here
-            // foo.com/api/{sessionId}/{EncodedDestination}/{clientId}/{DistionationAction?}/{id}  becomes   {clientId}/{DistionationAction?}/{id}
+            string destinationPath;
+            try
+            {
+                // the 4 represents the segment used for the final destination endpoint
+                destinationPath = uri.Segments.Skip(4).Aggregate((m, n) => m + n);
+            }
+            catch (System.InvalidOperationException)
+            {
+                throw new CannotParseUriException("Not enough URI segments. {0} detected. At least {1} required.",
+                                                  uri.Segments.Count(), 5); //this smells. Is there a way we can calculte the required segments? 
+            }
+            // foo.com/api/{sessionId}/{EncodedDestination}/{clientId}/{DistionationAction}/{id}/...  becomes   {clientId}/{DistionationAction?}/{id}/...
 
-            // decode url, should be second item in array
+            // decode url, should be fourth segment in the incoming uri
+
             var rootDestination = ExtractDestination(uri);
 
             var uriBuilder = new UriBuilder(rootDestination)
