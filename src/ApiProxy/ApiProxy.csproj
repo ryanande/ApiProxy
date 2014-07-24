@@ -260,6 +260,10 @@
     <Content Include="Scripts\jquery-2.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core.Model\Core.Model.csproj">
+      <Project>{07f9cdb5-bb2e-4672-a34e-f137abcad2aa}</Project>
+      <Name>Core.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{9ad027b8-4cae-4605-95df-46116f30b5cf}</Project>
       <Name>Core</Name>
