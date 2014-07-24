@@ -113,23 +113,17 @@ namespace EdFiValidation.ApiProxy.Core.Utility
 
         public Uri BuildDestinationUri(Uri uri)
         {
-            var path = uri.Segments.Skip(4).Aggregate((m, n) => m + n.Replace("/", "") + "/");
+            // the 2 represents the segment used for intent (sessionId for example)
+            var destinationPath = uri.Segments.Skip(4).Aggregate((m, n) => m + n);  //was ((m, n) => m.Replace("/", "") + "/" + n). This was dropping the '/' btwn clientId and destination action.   Not sure what the intent was here
+            // foo.com/api/{sessionId}/{EncodedDestination}/{clientId}/{DistionationAction?}/{id}  becomes   {clientId}/{DistionationAction?}/{id}
 
-      
             // decode url, should be second item in array
             var rootDestination = ExtractDestination(uri);
 
-            if (!rootDestination.EndsWith("/"))
-                rootDestination += "/";
-
-            var dest = new Uri(rootDestination + path);
-            
-            var uriBuilder = new UriBuilder
-            {
-                Scheme = dest.Scheme, 
-                Host = dest.Host,
-                Path = dest.AbsolutePath
-            };
+            var uriBuilder = new UriBuilder(rootDestination)
+                {
+                    Path = destinationPath
+                };
 
             if (!string.IsNullOrWhiteSpace(uri.Query))
                 uriBuilder.Query = uri.Query.Replace("?", "");
