@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CreateApiLogItem.cs" />
+    <Compile Include="Commands\CreateSesssionUseCaseSuccess.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Services\IValidationService.cs" />
     <Compile Include="Services\ValidationService.cs" />
     <Compile Include="Utility\CombGuid.cs" />

@@ -22,6 +22,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
         {
             var apiLog = new CreateApiLogItem
             {
+                Id = CombGuid.Generate(),
                 SessionId = _apiTransactionUtility.ExtractSessionId(request.RequestUri),
                 ApiRequest = _apiTransactionUtility.BuildApiRequest(request)
             };

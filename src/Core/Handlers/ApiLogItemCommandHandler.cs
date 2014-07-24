@@ -23,7 +23,7 @@ namespace EdFiValidation.ApiProxy.Core.Handlers
         {
             _collection.Insert(new RequestResponsePair
             {
-                Id = CombGuid.Generate(),
+                Id = command.Id,
                 SessionId = command.SessionId,
                 LogDate = DateTime.Now,
                 ApiRequest = command.ApiRequest,
