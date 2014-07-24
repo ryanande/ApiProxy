@@ -24,7 +24,7 @@ namespace EdFiValidation.ApiProxyTests.Core
             var actual = pathInspector.DecodeDestination(EncodedUrl);
             
             // assert
-            Assert.IsTrue(expected == actual);
+            Assert.IsTrue(expected.ToString() == actual);
         }
         
 
