@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using EdFiValidation.ApiProxy.Core.Commands;
 using EdFiValidation.ApiProxy.Core.Handlers;
 using EdFiValidation.ApiProxy.Core.Utility;
@@ -31,7 +32,18 @@ namespace EdFiValidation.ApiProxy.Core.Services
                 request.Content = null;
 
             // reset the request URI to the decoded path
-            var uri = _apiTransactionUtility.BuildDestinationUri(request.RequestUri);
+            Uri uri;
+           try
+            {
+                 uri = _apiTransactionUtility.BuildDestinationUri(request.RequestUri);
+            }
+           catch (CannotParseUriException ex)
+            {
+              return new HttpResponseMessage(HttpStatusCode.BadRequest)
+                 {
+                  ReasonPhrase   = ex.Message
+                 };
+            }
             request.RequestUri = uri;
 
             using (var client = new HttpClient())
