@@ -8,5 +8,10 @@ namespace EdFiValidation.ApiProxy.Core.Models
         public string SessionId { get; set; }
         public ApiRequest ApiRequest { get; set; }
         public ApiResponse ApiResponse { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: [{1}]", SessionId, LogDate);
+        }
     }
 }

@@ -10,5 +10,9 @@ namespace EdFiValidation.ApiProxy.Core.Models
 
         public List<UseCaseItem> Items { get; set; }
 
+        public override string ToString()
+        {
+            return Title;
+        }
     }
 }
