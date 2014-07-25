@@ -1,13 +1,8 @@
-﻿using System.Configuration;
+using System.Configuration;
 
 namespace Database
 {
-    public interface IConfig
-    {
-        string ProxyDbConnectionString { get; }
-    }
-
-    public class Config : IConfig
+    public class AppConfig : IAppConfig
     {
         public string ProxyDbConnectionString
         {

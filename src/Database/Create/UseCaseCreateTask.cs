@@ -2,6 +2,7 @@
 using System.Linq;
 using Database.Data;
 using EdFiValidation.ApiProxy.Core.Models;
+using EdFiValidation.ApiProxy.Utilities;
 using MongoDB.Driver;
 
 namespace Database.Create
@@ -14,9 +15,9 @@ namespace Database.Create
         // all default 
        
 
-        public UseCaseCreateTask(IConfig config, IDataList<UseCase> useCases)
+        public UseCaseCreateTask(IAppConfig appConfig, IDataList<UseCase> useCases)
         {
-            var url = new MongoUrl(config.ProxyDbConnectionString);
+            var url = new MongoUrl(appConfig.ProxyDbConnectionString);
             _db = new MongoClient(url)
                 .GetServer()
                 .GetDatabase(url.DatabaseName);

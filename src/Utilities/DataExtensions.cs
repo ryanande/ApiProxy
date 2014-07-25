@@ -1,8 +1,8 @@
 ﻿using MongoDB.Driver;
 
-namespace EdFiValidation.ApiProxy.Core
+namespace EdFiValidation.ApiProxy.Utilities
 {
-    public static class MongoExtensions
+    public static class DataExtensions
     {
         public static MongoCollection<T> GetCollection<T>(this MongoDatabase db)
         {

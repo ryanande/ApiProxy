@@ -1,6 +1,7 @@
 ﻿using EdFiValidation.ApiProxy.Core.Commands;
 using EdFiValidation.ApiProxy.Core.Models;
 using EdFiValidation.ApiProxy.Core.Utility;
+using EdFiValidation.ApiProxy.Utilities;
 using MongoDB.Driver;
 
 namespace EdFiValidation.ApiProxy.Core.Handlers

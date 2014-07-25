@@ -6,7 +6,7 @@ namespace Database.DependencyInjection
     {
         public ProgramRegistry()
         {
-            For<IConfig>().Use<Config>();
+            For<IAppConfig>().Use<AppConfig>();
         }
     }
 }

@@ -6,9 +6,9 @@ namespace Database.Create
     public class DropDatabaseTask : ITask
     {
         private readonly MongoDatabase _mongoDatabase;
-        public DropDatabaseTask(IConfig config)
+        public DropDatabaseTask(IAppConfig appConfig)
         {
-            var url = new MongoUrl(config.ProxyDbConnectionString);
+            var url = new MongoUrl(appConfig.ProxyDbConnectionString);
             _mongoDatabase = new MongoClient(url)
                 .GetServer()
                 .GetDatabase(url.DatabaseName);

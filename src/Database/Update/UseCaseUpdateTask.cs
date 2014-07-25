@@ -1,5 +1,6 @@
 ﻿using Database.Data;
 using EdFiValidation.ApiProxy.Core.Models;
+using EdFiValidation.ApiProxy.Utilities;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System;
@@ -13,9 +14,9 @@ namespace Database.Update
         private readonly MongoDatabase _db;
         private readonly IDataList<UseCase> _useCases;
 
-        public UseCaseUpdateTask(IConfig config, IDataList<UseCase> useCases)
+        public UseCaseUpdateTask(IAppConfig appConfig, IDataList<UseCase> useCases)
         {
-            var url = new MongoUrl(config.ProxyDbConnectionString);
+            var url = new MongoUrl(appConfig.ProxyDbConnectionString);
             _db = new MongoClient(url).GetServer().GetDatabase(url.DatabaseName);
 
             _useCases = useCases;

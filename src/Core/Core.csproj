@@ -80,7 +80,6 @@
     <Compile Include="Utility\IApiTransactionUtility.cs" />
     <Compile Include="Utility\ApiTransactionUtility.cs" />
     <Compile Include="Utility\IConfig.cs" />
-    <Compile Include="Utility\MongoExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -89,6 +88,10 @@
     <ProjectReference Include="..\Core.Model\Core.Model.csproj">
       <Project>{07f9cdb5-bb2e-4672-a34e-f137abcad2aa}</Project>
       <Name>Core.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{fbc5d423-87f2-4c1e-891d-2fd1da5a667d}</Project>
+      <Name>Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
