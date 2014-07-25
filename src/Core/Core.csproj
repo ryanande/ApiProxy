@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -66,6 +67,7 @@
     <Compile Include="Handlers\UseCaseValidationHandler.cs" />
     <Compile Include="Services\IValidationService.cs" />
     <Compile Include="Services\ValidationService.cs" />
+    <Compile Include="Utility\ApiTransactionUtilityExceptions.cs" />
     <Compile Include="Utility\CombGuid.cs" />
     <Compile Include="Dependencies\CoreRegistry.cs" />
     <Compile Include="Handlers\ApiLogItemCommandHandler.cs" />
