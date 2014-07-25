@@ -98,10 +98,6 @@ namespace EdFiValidation.ApiProxyTests.Core
             Assert.Throws<ConfigurationErrorsException>(() => pathInspector.ExtractSessionId(uri));
         }
 
-
-
-
-        //////////////////////////////////////////////////////////////////////////////////////
         [Test]
         public void ExtractDestination_Properly_Returns_UrlSegment_Index_From_Config_Value()
         {
@@ -118,7 +114,6 @@ namespace EdFiValidation.ApiProxyTests.Core
 
             // assert
             Assert.AreEqual(expected, actual);
-
         }
 
 
@@ -149,13 +144,41 @@ namespace EdFiValidation.ApiProxyTests.Core
             // act and assert
             Assert.Throws<ConfigurationErrorsException>(() => pathInspector.ExtractDestination(uri));
         }
+        /////////////////////////////////////////////////////////
 
+        [Test]
+        public void BuildDestinationUri_Builds_Correct_Destination_Uri()
+        {
+            //arrange
+            var expected =new Uri("http://www.unitTestsRule.com/destIndex0/destIndex1?query=this");
+            var incomingUri = new Uri("http://pseudohost.com:567/sessionId/aHR0cDovL3d3dy51bml0VGVzdHNSdWxlLmNvbQ==/destIndex0/destIndex1?query=this");
 
+            var config = Stub<IConfig>();
+            config.Stub(c => c.SessionIdSegmentIndex).IgnoreArguments().Return(1);
+            config.Stub(c => c.DestinationUrlSegementIndex).IgnoreArguments().Return(2);
+            var pathInspector = new ApiTransactionUtility(config);
 
+            // act
+            var actual = pathInspector.BuildDestinationUri(incomingUri);
 
+            // assert
+            Assert.AreEqual(expected, actual);
+        }
 
+        [Test]
+        public void BuildDestinationUri_Throws_When_Decoded_Destination_Uri_Not_Valid()
+        {
+            //arrange
+            var incomingUri = new Uri("http://pseudohost.com:567/sessionId/dG90YWxseSFub3ReYSxVcmk=/destIndex0/destIndex1?query=this");
+            //dG90YWxseSFub3ReYSxVcmk= decodes to "totally!not^a,Uri"
 
+            var config = Stub<IConfig>();
+            config.Stub(c => c.SessionIdSegmentIndex).IgnoreArguments().Return(1);
+            config.Stub(c => c.DestinationUrlSegementIndex).IgnoreArguments().Return(2);
+            var pathInspector = new ApiTransactionUtility(config);
 
-        //Test ExtractDestination URL 
+            // act and assert
+            Assert.Throws<CannotParseUriException>(() => pathInspector.BuildDestinationUri(incomingUri));
+        }
     }
 }

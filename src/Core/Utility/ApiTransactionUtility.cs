@@ -133,7 +133,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
             var destinationRoot = ExtractDestination(uri);
 
             // the DestinationUrlSegementIndex+1 segment represents where the final destination's uri begins. We forward this and everything after it, unmodified
-            string destinationPath = uri.Segments.Skip(_config.DestinationUrlSegementIndex + 1).Aggregate((m, n) => m + n);
+            var destinationPath = uri.Segments.Skip(_config.DestinationUrlSegementIndex + 1).Aggregate((m, n) => m + n);
 
             UriBuilder destinationUri;
             try
