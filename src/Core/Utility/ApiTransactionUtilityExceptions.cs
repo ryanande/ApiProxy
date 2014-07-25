@@ -11,7 +11,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
     public class CannotParseUriException : Exception
     {
         public static readonly string ExpectedFormatMsg = 
-            "Expected URI format is proxy.edfi.org/api/{sessionId}/{Base64EncodedDestination}/{clientId}/{DistionationAction}/{ActionParameters}...";
+            "Expected URI format is /api/{sessionId}/{Base64EncodedDestination}/{clientId}/{DistionationAction}/{ActionParameters}...";
         //todo : update the spec to get it in sync with the above format... after confirming the above is correct :P
 
         public CannotParseUriException()
@@ -35,36 +35,6 @@ namespace EdFiValidation.ApiProxy.Core.Utility
         }
 
         protected CannotParseUriException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-    }
-
-
-    [Serializable]
-    public class InvalidConfigurationValueException : Exception
-    {
-        public InvalidConfigurationValueException()
-            : base("Invalid configuration value in ApiTransactionUtility._config")
-        {
-        }
-
-        public InvalidConfigurationValueException(string message)
-            : base(message)
-        {
-        }
-
-        public InvalidConfigurationValueException(string format, params object[] args)
-            : base(string.Format(format, args))
-        {
-        }
-
-        public InvalidConfigurationValueException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
-
-        protected InvalidConfigurationValueException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

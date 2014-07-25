@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Web;
 using EdFiValidation.ApiProxy.Core.Models;
+using System.Configuration;
 
 namespace EdFiValidation.ApiProxy.Core.Utility
 {
@@ -84,7 +85,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
         public string ExtractSessionId(Uri uri)
         {
             if (_config.SessionIdSegmentIndex < 0)
-                throw new InvalidConfigurationValueException("Invalid SessionIdSegmentIndex value in ApiTransactionUtility._config: {0}", _config.SessionIdSegmentIndex);
+                throw new ConfigurationException("Invalid or missing SessionIdSegmentIndex value in ApiTransactionUtility._config");
             
             return uri.Segments.Count() - 1 < _config.SessionIdSegmentIndex
                  ? string.Empty : uri.Segments[_config.SessionIdSegmentIndex].Replace("/", "");
@@ -94,7 +95,14 @@ namespace EdFiValidation.ApiProxy.Core.Utility
         public string ExtractDestination(Uri uri)
         {
             if (_config.DestinationUrlSegementIndex < 0)
-                throw new InvalidConfigurationValueException("Invalid DestinationUrlSegementIndex value in ApiTransactionUtility._config: {0}", _config.DestinationUrlSegementIndex);
+                throw new ConfigurationException("Invalid or missing DestinationUrlSegementIndex value in ApiTransactionUtility._config");
+
+            if (uri.Segments.Count() - 1 < _config.DestinationUrlSegementIndex)
+            {
+                throw new CannotParseUriException(
+                    "Error parsing URI. Not enough URI segments. {0} detected. At least {1} required. " + CannotParseUriException.ExpectedFormatMsg,
+                    uri.Segments.Count(), _config.DestinationUrlSegementIndex + 1);
+            }
 
             var dest = uri.Segments[_config.DestinationUrlSegementIndex].Replace("/", "");
             dest = WebUtility.UrlDecode(dest);
@@ -122,17 +130,11 @@ namespace EdFiValidation.ApiProxy.Core.Utility
 
         public Uri BuildDestinationUri(Uri uri)
         {
-            if (uri.Segments.Count() - 1 < _config.DestinationUrlSegementIndex)
-            {
-                throw new CannotParseUriException(
-                    "Error parsing URI. Not enough URI segments. {0} detected. At least {1} required. " + CannotParseUriException.ExpectedFormatMsg,
-                    uri.Segments.Count(), _config.DestinationUrlSegementIndex + 1);
-            }
-
-            // the 4 represents the segment used for the final destination endpoint
-            string destinationPath = uri.Segments.Skip(4).Aggregate((m, n) => m + n);
             // decode url, should be fourth segment in the incoming uri
             var destinationRoot = ExtractDestination(uri);
+
+            // the DestinationUrlSegementIndex+1 segment represents where the final destination's uri begins. We forward this and everything after it, unmodified
+            string destinationPath = uri.Segments.Skip(_config.DestinationUrlSegementIndex + 1).Aggregate((m, n) => m + n);
 
             UriBuilder destinationUri;
             try
