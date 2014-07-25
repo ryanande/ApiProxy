@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Net;
 using EdFiValidation.ApiProxy.Core.Commands;
 using EdFiValidation.ApiProxy.Core.Handlers;
@@ -40,9 +41,9 @@ namespace EdFiValidation.ApiProxy.Core.Services
             }
             catch (CannotParseUriException ex)
             {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = ex.Message };
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError) { ReasonPhrase = ex.Message };
             }
-            catch (InvalidConfigurationValueException ex)
+            catch (ConfigurationErrorsException ex)
             {
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError) { ReasonPhrase = ex.Message };
             }
