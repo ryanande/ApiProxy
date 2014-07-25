@@ -83,10 +83,11 @@ namespace EdFiValidation.ApiProxy.Core.Utility
 
         public string ExtractSessionId(Uri uri)
         {
-            return uri.Segments.Count() - 1 < _config.SessionIdSegmentIndex ||
-                _config.SessionIdSegmentIndex < 0 ?
-                string.Empty :
-                uri.Segments[_config.SessionIdSegmentIndex].Replace("/", "");
+            if (_config.SessionIdSegmentIndex < 0)
+                throw new InvalidConfigurationValueException("Invalid SessionIdSegmentIndex value in ApiTransactionUtility._config: {0}", _config.SessionIdSegmentIndex);
+            
+            return uri.Segments.Count() - 1 < _config.SessionIdSegmentIndex
+                 ? string.Empty : uri.Segments[_config.SessionIdSegmentIndex].Replace("/", "");
         }
 
 
@@ -112,7 +113,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
             }
             catch (FormatException ex)
             {
-                throw new CannotParseUriException("Error trying to decode destination url from Base-64 format. " + ex.Message);
+                throw new CannotParseUriException("Error while trying to decode destination url from Base-64 format. " + ex.Message);
             }
            
             return decodedUrl;
@@ -131,12 +132,12 @@ namespace EdFiValidation.ApiProxy.Core.Utility
             // the 4 represents the segment used for the final destination endpoint
             string destinationPath = uri.Segments.Skip(4).Aggregate((m, n) => m + n);
             // decode url, should be fourth segment in the incoming uri
-            var rootDestination = ExtractDestination(uri);
+            var destinationRoot = ExtractDestination(uri);
 
-            UriBuilder uriBuilder;
+            UriBuilder destinationUri;
             try
             {
-                 uriBuilder = new UriBuilder(rootDestination)
+                 destinationUri = new UriBuilder(destinationRoot)
                 {
                     Path = destinationPath
                 };
@@ -146,11 +147,10 @@ namespace EdFiValidation.ApiProxy.Core.Utility
                 throw new CannotParseUriException("Decoded destination uri was invalid. " + ex.Message);
             }
             
-
             if (!string.IsNullOrWhiteSpace(uri.Query))
-                uriBuilder.Query = uri.Query.Replace("?", "");
+                destinationUri.Query = uri.Query.Replace("?", "");
 
-            return uriBuilder.Uri;
+            return destinationUri.Uri;
         }
     }
 }
