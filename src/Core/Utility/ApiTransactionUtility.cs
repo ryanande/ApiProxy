@@ -85,7 +85,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
         public string ExtractSessionId(Uri uri)
         {
             if (_config.SessionIdSegmentIndex < 0)
-                throw new ConfigurationException("Invalid or missing SessionIdSegmentIndex value in ApiTransactionUtility._config");
+                throw new ConfigurationErrorsException("Invalid or missing SessionIdSegmentIndex value in ApiTransactionUtility._config");
             
             return uri.Segments.Count() - 1 < _config.SessionIdSegmentIndex
                  ? string.Empty : uri.Segments[_config.SessionIdSegmentIndex].Replace("/", "");
@@ -95,13 +95,12 @@ namespace EdFiValidation.ApiProxy.Core.Utility
         public string ExtractDestination(Uri uri)
         {
             if (_config.DestinationUrlSegementIndex < 0)
-                throw new ConfigurationException("Invalid or missing DestinationUrlSegementIndex value in ApiTransactionUtility._config");
+                throw new ConfigurationErrorsException("Invalid or missing DestinationUrlSegementIndex value in ApiTransactionUtility._config");
 
             if (uri.Segments.Count() - 1 < _config.DestinationUrlSegementIndex)
             {
-                throw new CannotParseUriException(
-                    "Error parsing URI. Not enough URI segments. {0} detected. At least {1} required. " + CannotParseUriException.ExpectedFormatMsg,
-                    uri.Segments.Count(), _config.DestinationUrlSegementIndex + 1);
+                throw new CannotParseUriException("Error parsing URI. Not enough URI segments. {0} detected. At least {1} required. ", 
+                 uri.Segments.Count(), _config.DestinationUrlSegementIndex + 1);
             }
 
             var dest = uri.Segments[_config.DestinationUrlSegementIndex].Replace("/", "");

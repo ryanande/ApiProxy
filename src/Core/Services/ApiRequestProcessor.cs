@@ -43,7 +43,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
             {
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError) { ReasonPhrase = ex.Message };
             }
-            catch (ConfigurationException ex)
+            catch (ConfigurationErrorsException ex)
             {
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError) { ReasonPhrase = ex.Message };
             }
