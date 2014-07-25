@@ -34,16 +34,17 @@ namespace EdFiValidation.ApiProxy.Core.Services
 
             // reset the request URI to the decoded path
             Uri uri;
-           try
+            try
             {
-                 uri = _apiTransactionUtility.BuildDestinationUri(request.RequestUri);
+                uri = _apiTransactionUtility.BuildDestinationUri(request.RequestUri);
             }
-           catch (CannotParseUriException ex)
+            catch (CannotParseUriException ex)
             {
-              return new HttpResponseMessage(HttpStatusCode.BadRequest)
-                 {
-                  ReasonPhrase   = ex.Message
-                 };
+                return new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = ex.Message };
+            }
+            catch (InvalidConfigurationValueException ex)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError) { ReasonPhrase = ex.Message };
             }
             request.RequestUri = uri;
 
