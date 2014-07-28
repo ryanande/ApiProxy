@@ -131,24 +131,26 @@ namespace EdFiValidation.ApiProxy.Core.Utility
         {
             // decode url, should be fourth segment in the incoming uri
             var destinationRoot = ExtractDestination(uri);
+            destinationRoot = destinationRoot.TrimEnd('/');
 
             // the DestinationUrlSegementIndex+1 segment represents where the final destination's uri begins. We forward this and everything after it, unmodified
             var destinationPath = uri.Segments.Skip(_config.DestinationUrlSegementIndex + 1).Aggregate((m, n) => m + n);
+            destinationPath = destinationPath.TrimStart('/').TrimEnd('/');
 
             UriBuilder destinationUri;
             try
             {
                 destinationUri = new UriBuilder(destinationRoot);
-                destinationUri.Path += destinationPath;
+                destinationUri.Path += "/" + destinationPath;
+
+                if (!string.IsNullOrWhiteSpace(uri.Query))
+                    destinationUri.Query = uri.Query.Replace("?", "");
             }
             catch (UriFormatException ex)
             {
                 throw new CannotParseUriException("Decoded destination uri was invalid. " + ex.Message);
             }
             
-            if (!string.IsNullOrWhiteSpace(uri.Query))
-                destinationUri.Query = uri.Query.Replace("?", "");
-
             return destinationUri.Uri;
         }
     }
