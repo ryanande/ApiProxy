@@ -146,20 +146,19 @@ namespace EdFiValidation.ApiProxyTests.Core
         }
 
         [Test]
-        public void BuildDestinationUri_Builds_Correct_Destination_Uri()
+        public void BuildDestinationUri_Builds_Correct_Destination_Uri_MidSlashes()
         {
             //arrange
-            var incomingUri_trailingSlash = new Uri(
+            var incomingUriTrailingSlash = new Uri(
                 "http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0Lw==/students/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
             //encoded part = https://tn-rest-production.cloudapp.net:443/api/v1.0/2014/
-            var incomingUri_noTrailingSlash = new Uri(
-                "http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0Lw==/students/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
-            //encoded part = https://tn-rest-production.cloudapp.net:443/api/v1.0/2014  
-            var incomingUri_crazySlashes = new Uri(
-                "http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My8vYXBpLy8vdjEuMC8yMDE0Ly8vLw==/students/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
-            //encoded part = https://tn-rest-production.cloudapp.net:443//api///v1.0/2014////
-           
+            var incomingUriNoTrailingSlash = new Uri(
+                "http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0/students/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            //encoded part = https://tn-rest-production.cloudapp.net:443/api/v1.0/2014  <--- note the difference in last char. A key breaking point! 
             var expected = new Uri("https://tn-rest-production.cloudapp.net:443/api/v1.0/2014/students/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+
+            //the ed-fi validation API does not care if there are extra slashes between each Uri segment. 
+            //So long as we ensure there is at least 1 slash between each segment, their API can handle it properly (as of July 2014)
 
             var config = Stub<IConfig>();
             config.Stub(c => c.SessionIdSegmentIndex).IgnoreArguments().Return(1);
@@ -167,24 +166,54 @@ namespace EdFiValidation.ApiProxyTests.Core
             var pathInspector = new ApiTransactionUtility(config);
 
             // act
-            var actual_trailingSlash = pathInspector.BuildDestinationUri(incomingUri_trailingSlash);
-            var actual_noTrailingSlash = pathInspector.BuildDestinationUri(incomingUri_noTrailingSlash);
-            var actual_crazySlashes = pathInspector.BuildDestinationUri(incomingUri_crazySlashes);
-
+            var actualTrailingSlash = pathInspector.BuildDestinationUri(incomingUriTrailingSlash);
+            var actualNoTrailingSlash = pathInspector.BuildDestinationUri(incomingUriNoTrailingSlash);
+            
             // assert
-            Assert.AreEqual(expected, actual_trailingSlash);
-            Assert.AreEqual(expected, actual_noTrailingSlash);
-            Assert.AreEqual(expected, actual_crazySlashes);
+            Assert.AreEqual(expected, actualTrailingSlash);
+            Assert.AreEqual(expected, actualNoTrailingSlash);
         }
 
         [Test]
-        public void BuildDestinationUri_Throws_When_Decoded_Destination_Uri_Not_Valid()
+        public void BuildDestinationUri_Builds_Correct_Destination_Uri_Query()
         {
             //arrange
-            var incomingUri = new Uri("http://pseudohost.com:567/sessionId/dG90YWxseSFub3ReYSxVcmk=/destIndex0/destIndex1?query=this");
+            var incomingUriQuery = new Uri(
+                "http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0Lw==/students?id=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var incomingUriSlashB4Query = new Uri(
+                "http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0Lw==/students/?id=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var incomingUriMultiQuery = new Uri(
+                "http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0Lw==/students??id=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            //encoded part for all of the above = https://tn-rest-production.cloudapp.net:443/api/v1.0/2014/
+            var expected = new Uri("https://tn-rest-production.cloudapp.net:443/api/v1.0/2014/students?id=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+
+            //the ed-fi validation API does not care if there are extra slashes between each Uri segment. 
+            //So long as we ensure there is at least 1 slash between each segment, their API can handle it properly (as of July 2014)
+
+            var config = Stub<IConfig>();
+            config.Stub(c => c.SessionIdSegmentIndex).IgnoreArguments().Return(1);
+            config.Stub(c => c.DestinationUrlSegementIndex).IgnoreArguments().Return(2);
+            var pathInspector = new ApiTransactionUtility(config);
+
+            // act
+            var actualQuery = pathInspector.BuildDestinationUri(incomingUriQuery);
+            var actualSlashB4Query = pathInspector.BuildDestinationUri(incomingUriSlashB4Query);
+            var actualMultiQuery = pathInspector.BuildDestinationUri(incomingUriQuery);
+
+            // assert
+            Assert.AreEqual(expected, actualSlashB4Query);
+            Assert.AreEqual(expected, actualQuery);
+            Assert.AreEqual(expected, actualMultiQuery);
+        }
+
+        [Test]
+        public void BuildDestinationUri_Throws_When_Destination_Uri_Not_Valid_Or_Not_Enough_Segments()
+        {
+            //arrange
+            var incomingNonUriEncoded = new Uri("http://pseudohost.com:567/sessionId/dG90YWxseSFub3ReYSxVcmk=/destIndex0/destIndex1?query=this");
             //dG90YWxseSFub3ReYSxVcmk= decodes to "totally!not^a,Uri"
-            var incomingUri1 = new Uri("http://pseudohost.com:567/sessionId/YWxtb3N0QS9Vcmk=/destIndex0/destIndex1?query=this");
-            //YWxtb3N0QS9Vcmk= decodes to "almostA/Uri
+
+            var incomingNotEnoughSegments = new Uri("http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0Lw==");
 
             var config = Stub<IConfig>();
             config.Stub(c => c.SessionIdSegmentIndex).IgnoreArguments().Return(1);
@@ -192,8 +221,8 @@ namespace EdFiValidation.ApiProxyTests.Core
             var pathInspector = new ApiTransactionUtility(config);
 
             // act and assert
-            Assert.Throws<CannotParseUriException>(() => pathInspector.BuildDestinationUri(incomingUri));
-            Assert.Throws<CannotParseUriException>(() => pathInspector.BuildDestinationUri(incomingUri1));
+            Assert.Throws<CannotParseUriException>(() => pathInspector.BuildDestinationUri(incomingNonUriEncoded));
+            Assert.Throws<CannotParseUriException>(() => pathInspector.BuildDestinationUri(incomingNotEnoughSegments));
         }
     }
 }
