@@ -207,11 +207,13 @@ namespace EdFiValidation.ApiProxyTests.Core
         }
 
         [Test]
-        public void BuildDestinationUri_Throws_When_Decoded_Destination_Uri_Not_Valid()
+        public void BuildDestinationUri_Throws_When_Destination_Uri_Not_Valid_Or_Not_Enough_Segments()
         {
             //arrange
-            var incomingUri = new Uri("http://pseudohost.com:567/sessionId/dG90YWxseSFub3ReYSxVcmk=/destIndex0/destIndex1?query=this");
+            var incomingNonUriEncoded = new Uri("http://pseudohost.com:567/sessionId/dG90YWxseSFub3ReYSxVcmk=/destIndex0/destIndex1?query=this");
             //dG90YWxseSFub3ReYSxVcmk= decodes to "totally!not^a,Uri"
+
+            var incomingNotEnoughSegments = new Uri("http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0Lw==");
 
             var config = Stub<IConfig>();
             config.Stub(c => c.SessionIdSegmentIndex).IgnoreArguments().Return(1);
@@ -219,7 +221,8 @@ namespace EdFiValidation.ApiProxyTests.Core
             var pathInspector = new ApiTransactionUtility(config);
 
             // act and assert
-            Assert.Throws<CannotParseUriException>(() => pathInspector.BuildDestinationUri(incomingUri));
+            Assert.Throws<CannotParseUriException>(() => pathInspector.BuildDestinationUri(incomingNonUriEncoded));
+            Assert.Throws<CannotParseUriException>(() => pathInspector.BuildDestinationUri(incomingNotEnoughSegments));
         }
     }
 }

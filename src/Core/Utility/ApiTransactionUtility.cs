@@ -97,10 +97,10 @@ namespace EdFiValidation.ApiProxy.Core.Utility
             if (_config.DestinationUrlSegementIndex < 0)
                 throw new ConfigurationErrorsException("Invalid or missing DestinationUrlSegementIndex value in ApiTransactionUtility._config");
 
-            if (uri.Segments.Count() - 1 < _config.DestinationUrlSegementIndex)
+            if (uri.Segments.Count() - 1 <= _config.DestinationUrlSegementIndex)
             {
                 throw new CannotParseUriException("Error parsing URI. Not enough URI segments. {0} detected. At least {1} required. ", 
-                 uri.Segments.Count(), _config.DestinationUrlSegementIndex + 1);
+                 uri.Segments.Count(), _config.DestinationUrlSegementIndex + 2); //+2 because index is 0-based and we need at least 1 segment after the destination url
             }
 
             var dest = uri.Segments[_config.DestinationUrlSegementIndex].Replace("/", "");
@@ -137,21 +137,30 @@ namespace EdFiValidation.ApiProxy.Core.Utility
             var destinationPath = uri.Segments.Skip(_config.DestinationUrlSegementIndex + 1).Aggregate((m, n) => m + n);
             destinationPath = destinationPath.TrimStart('/').TrimEnd('/');
 
-            UriBuilder destinationUri;
+            UriBuilder destinationUriBuilder;
             try
             {
-                destinationUri = new UriBuilder(destinationRoot);
-                destinationUri.Path += "/" + destinationPath;
-
-                if (!string.IsNullOrWhiteSpace(uri.Query))
-                    destinationUri.Query = uri.Query.Replace("?", "");
+                destinationUriBuilder = new UriBuilder(destinationRoot);
             }
             catch (UriFormatException ex)
             {
                 throw new CannotParseUriException("Decoded destination uri was invalid. " + ex.Message);
             }
-            
-            return destinationUri.Uri;
+
+            Uri destinationUri;
+            try
+            {
+                destinationUriBuilder.Path += "/" + destinationPath;
+                if (!string.IsNullOrWhiteSpace(uri.Query))
+                    destinationUriBuilder.Query = uri.Query.Replace("?", "");
+                destinationUri = new Uri(destinationUriBuilder.Uri.ToString());
+            }
+            catch (UriFormatException ex)
+            {
+                throw new CannotParseUriException("Invalid uri segments or query string after the encoded uri. " + ex.Message);
+            }
+
+            return destinationUri;
         }
     }
 }
