@@ -144,14 +144,22 @@ namespace EdFiValidation.ApiProxyTests.Core
             // act and assert
             Assert.Throws<ConfigurationErrorsException>(() => pathInspector.ExtractDestination(uri));
         }
-        /////////////////////////////////////////////////////////
 
         [Test]
         public void BuildDestinationUri_Builds_Correct_Destination_Uri()
         {
             //arrange
-            var expected =new Uri("http://www.unitTestsRule.com/destIndex0/destIndex1?query=this");
-            var incomingUri = new Uri("http://pseudohost.com:567/sessionId/aHR0cDovL3d3dy51bml0VGVzdHNSdWxlLmNvbQ==/destIndex0/destIndex1?query=this");
+            var incomingUri_trailingSlash = new Uri(
+                "http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0Lw==/students/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            //encoded part = https://tn-rest-production.cloudapp.net:443/api/v1.0/2014/
+            var incomingUri_noTrailingSlash = new Uri(
+                "http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0Lw==/students/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            //encoded part = https://tn-rest-production.cloudapp.net:443/api/v1.0/2014  
+            var incomingUri_crazySlashes = new Uri(
+                "http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My8vYXBpLy8vdjEuMC8yMDE0Ly8vLw==/students/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            //encoded part = https://tn-rest-production.cloudapp.net:443//api///v1.0/2014////
+           
+            var expected = new Uri("https://tn-rest-production.cloudapp.net:443/api/v1.0/2014/students/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
             var config = Stub<IConfig>();
             config.Stub(c => c.SessionIdSegmentIndex).IgnoreArguments().Return(1);
@@ -159,10 +167,14 @@ namespace EdFiValidation.ApiProxyTests.Core
             var pathInspector = new ApiTransactionUtility(config);
 
             // act
-            var actual = pathInspector.BuildDestinationUri(incomingUri);
+            var actual_trailingSlash = pathInspector.BuildDestinationUri(incomingUri_trailingSlash);
+            var actual_noTrailingSlash = pathInspector.BuildDestinationUri(incomingUri_noTrailingSlash);
+            var actual_crazySlashes = pathInspector.BuildDestinationUri(incomingUri_crazySlashes);
 
             // assert
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, actual_trailingSlash);
+            Assert.AreEqual(expected, actual_noTrailingSlash);
+            Assert.AreEqual(expected, actual_crazySlashes);
         }
 
         [Test]
@@ -171,6 +183,8 @@ namespace EdFiValidation.ApiProxyTests.Core
             //arrange
             var incomingUri = new Uri("http://pseudohost.com:567/sessionId/dG90YWxseSFub3ReYSxVcmk=/destIndex0/destIndex1?query=this");
             //dG90YWxseSFub3ReYSxVcmk= decodes to "totally!not^a,Uri"
+            var incomingUri1 = new Uri("http://pseudohost.com:567/sessionId/YWxtb3N0QS9Vcmk=/destIndex0/destIndex1?query=this");
+            //YWxtb3N0QS9Vcmk= decodes to "almostA/Uri
 
             var config = Stub<IConfig>();
             config.Stub(c => c.SessionIdSegmentIndex).IgnoreArguments().Return(1);
@@ -179,6 +193,7 @@ namespace EdFiValidation.ApiProxyTests.Core
 
             // act and assert
             Assert.Throws<CannotParseUriException>(() => pathInspector.BuildDestinationUri(incomingUri));
+            Assert.Throws<CannotParseUriException>(() => pathInspector.BuildDestinationUri(incomingUri1));
         }
     }
 }

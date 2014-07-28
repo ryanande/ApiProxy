@@ -138,10 +138,8 @@ namespace EdFiValidation.ApiProxy.Core.Utility
             UriBuilder destinationUri;
             try
             {
-                 destinationUri = new UriBuilder(destinationRoot)
-                {
-                    Path = destinationPath
-                };
+                destinationUri = new UriBuilder(destinationRoot);
+                destinationUri.Path += destinationPath;
             }
             catch (UriFormatException ex)
             {
