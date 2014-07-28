@@ -198,7 +198,7 @@ namespace EdFiValidation.ApiProxyTests.Core
             // act
             var actualQuery = pathInspector.BuildDestinationUri(incomingUriQuery);
             var actualSlashB4Query = pathInspector.BuildDestinationUri(incomingUriSlashB4Query);
-            var actualMultiQuery = pathInspector.BuildDestinationUri(incomingUriQuery);
+            var actualMultiQuery = pathInspector.BuildDestinationUri(incomingUriMultiQuery);
 
             // assert
             Assert.AreEqual(expected, actualSlashB4Query);
@@ -212,7 +212,6 @@ namespace EdFiValidation.ApiProxyTests.Core
             //arrange
             var incomingNonUriEncoded = new Uri("http://pseudohost.com:567/sessionId/dG90YWxseSFub3ReYSxVcmk=/destIndex0/destIndex1?query=this");
             //dG90YWxseSFub3ReYSxVcmk= decodes to "totally!not^a,Uri"
-
             var incomingNotEnoughSegments = new Uri("http://pseudohost.com:567/sessionId/aHR0cHM6Ly90bi1yZXN0LXByb2R1Y3Rpb24uY2xvdWRhcHAubmV0OjQ0My9hcGkvdjEuMC8yMDE0Lw==");
 
             var config = Stub<IConfig>();
