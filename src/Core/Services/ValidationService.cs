@@ -27,10 +27,12 @@ namespace EdFiValidation.ApiProxy.Core.Services
             var useCases = _useCaseQueryService.GetAll();
 
 
+            // this is a very niaeve stab at the mathing rule.
             var passedUseCases = (from useCase in useCases
                                   let correctCounter = useCase.Items.Count(item => 
                                       requestResponses.Any(r => 
-                                          string.Equals(r.ApiRequest.UriAccessed, item.Path, StringComparison.CurrentCultureIgnoreCase)))
+                                          string.Equals(r.ApiRequest.UriAccessed, item.Path, StringComparison.CurrentCultureIgnoreCase) && // path and
+                                          string.Equals(r.ApiRequest.HttpMethod, item.Method, StringComparison.CurrentCultureIgnoreCase))) // method match
                                   where correctCounter == useCase.Items.Count
                                   select useCase).ToList();
 
@@ -39,8 +41,10 @@ namespace EdFiValidation.ApiProxy.Core.Services
             if (passedUseCases.Count > 0)
                 _commandHandler.Handle(new CreateUseCaseValidation
                 {
-                    Id = CombGuid.Generate()
-
+                    Id = CombGuid.Generate(),
+                    ClientId = Guid.Empty,
+                    SessionId = sessionId,
+                    Cases = passedUseCases
                 });
         }
     }
