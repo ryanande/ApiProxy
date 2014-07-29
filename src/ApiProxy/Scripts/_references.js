@@ -5,5 +5,6 @@
 /// <reference path="respond.js" />
 /// <reference path="respond.matchmedia.addlistener.js" />
 /// <reference path="validatesession.js" />
-/// <reference path="app.js" />
 /// <reference path="knockout-3.1.0.js" />
+/// <reference path="knockout.mapping-latest.js" />
+/// <reference path="toastr.min.js" />

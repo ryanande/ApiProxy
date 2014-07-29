@@ -1,62 +1,65 @@
 ﻿
-// on load
-
-
-
-
-
-
-
-
-var reqResPair = function () {
-    this.Id = "";
-    this.LogDate = "";
-    this.SessionId = "";
-    this.ApiRequest = "";
-    this.ApiResponse = "";
-}
-
-reqResPair.prototype.InjectFrom = function (obj) {
-    for (var propertyName in obj) {
-        if (this.hasOwnProperty(propertyName))
-            this[propertyName] = obj[propertyName];
-    }
-    return this;
-}
-
-
 
 var viewModel = function () {
 
     var self = this;
 
-    this.sessionId = ko.observable("");
-    this.Items = ko.observableArray([]);
+    this.isLoading = ko.observable(false);
 
-    this.validateData = function() {
+    this.sessionId = ko.observable(getSessionId());
+    this.requestCount = ko.observable(0);
+    this.errorCount = ko.observable(0);
+    this.validUseCases = ko.observableArray([]);
+    
+};
 
-    };
+viewModel.prototype.loadData = function () {
 
+   
+}
+
+viewModel.prototype.runValidation = function () {
+
+    var self = this;
+    self.isLoading(true);
+
+    $.ajax({
+        type: 'GET',
+        url: '/api/validationRun/' + self.sessionId(),
+        dataType: 'json',
+        success: function (result) {
+            self.validUseCases(ko.mapping.fromJS(result));
+            toastr.success("Loaded validation use case results", "Success!");
+        },
+        error: function (jqXHR, textStatus, errorThrow) {
+            self.isLoading(false);
+            toastr.error(errorThrow, "Err");
+        }
+    }).done(function () {
+        self.isLoading(false);
+    });
+};
+
+ko.bindingHandlers.fadeVisible = {
+    init: function (element, valueAccessor) {
+        // Initially set the element to be instantly visible/hidden depending on the value
+        var value = valueAccessor();
+        $(element).toggle(ko.unwrap(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+    },
+    update: function (element, valueAccessor) {
+        // Whenever the value subsequently changes, slowly fade the element in or out
+        var value = valueAccessor();
+        ko.unwrap(value) ? $(element).fadeIn() : $(element).fadeOut();
+    }
 };
 
 
+ko.applyBindings(new viewModel());
 
-
-
-
-ko.applyBindings(viewModel);
-
-
-function getData(session) {
-    $.ajax({
-        complete: function() {
-            
-        },
-        type: 'GET',
-        url: '/api/validate/' + session,
-
-        success: function (result) {
-            alert('yo:' + result)
-        }
-    })
+function getSessionId() {
+    var pathArray = window.location.pathname.split('/');
+    return pathArray[pathArray.length - 1];
 }
+
+
+
