@@ -1,5 +1,6 @@
 ﻿using Database.Data;
 using EdFiValidation.ApiProxy.Core.Models;
+using EdFiValidation.ApiProxy.Utilities;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System;
@@ -10,29 +11,27 @@ namespace Database.Update
     public class UseCaseUpdateTask : IUpdateTask
     {
 
-        private readonly MongoCollection<UseCase> _collection;
+        private readonly MongoDatabase _db;
         private readonly IDataList<UseCase> _useCases;
 
-        public UseCaseUpdateTask(IConfig config, IDataList<UseCase> useCases)
+        public UseCaseUpdateTask(IAppConfig appConfig, IDataList<UseCase> useCases)
         {
-            var url = new MongoUrl(config.ProxyDbConnectionString);
-            var db = new MongoClient(url)
-                .GetServer()
-                .GetDatabase(url.DatabaseName);
+            var url = new MongoUrl(appConfig.ProxyDbConnectionString);
+            _db = new MongoClient(url).GetServer().GetDatabase(url.DatabaseName);
 
-            _collection = db.GetCollection<UseCase>("UseCase");
             _useCases = useCases;
         }
 
 
         public void Execute(Action<string> postAction)
         {
+            var collection = _db.GetCollection<UseCase>();
             _useCases.GetList().ToList().ForEach(uc =>
             {
                 var query = Query<UseCase>.EQ(e => e.Id, uc.Id);
-                if (_collection.Find(query).FirstOrDefault() == null)
+                if (collection.Find(query).FirstOrDefault() == null)
                 {
-                    _collection.Save(uc);
+                    collection.Save(uc);
                 }
             });
         }

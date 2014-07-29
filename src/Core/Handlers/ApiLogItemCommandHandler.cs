@@ -2,33 +2,39 @@
 using EdFiValidation.ApiProxy.Core.Commands;
 using EdFiValidation.ApiProxy.Core.Models;
 using EdFiValidation.ApiProxy.Core.Utility;
+using EdFiValidation.ApiProxy.Utilities;
 using MongoDB.Driver;
 
 namespace EdFiValidation.ApiProxy.Core.Handlers
 {
     public class ApiLogItemCommandHandler : ICommandHandler<CreateApiLogItem>
     {
-        private readonly MongoCollection<RequestResponsePair> _collection;
+        private readonly MongoDatabase _db;
 
         public ApiLogItemCommandHandler(IConfig config)
         {
             var url = new MongoUrl(config.ProxyDbConnectionString);
-            var db = new MongoClient(url)
+            _db = new MongoClient(url)
                 .GetServer()
                 .GetDatabase(url.DatabaseName);
-
-            _collection = db.GetCollection<RequestResponsePair>("RequestResponsePair");
         }
         public void Handle(CreateApiLogItem command)
         {
-            _collection.Insert(new RequestResponsePair
+            var requestResponsePair = new RequestResponsePair
             {
-                Id = CombGuid.Generate(),
+                Id = command.Id,
                 SessionId = command.SessionId,
                 LogDate = DateTime.Now,
                 ApiRequest = command.ApiRequest,
                 ApiResponse = command.ApiResponse
-            });
+            };
+            
+
+            var collection = _db.GetCollection<RequestResponsePair>();
+            collection.Insert(requestResponsePair);
         }
     }
+
+
+    
 }

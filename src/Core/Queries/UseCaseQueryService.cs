@@ -1,5 +1,6 @@
 using EdFiValidation.ApiProxy.Core.Models;
 using EdFiValidation.ApiProxy.Core.Utility;
+using EdFiValidation.ApiProxy.Utilities;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
@@ -18,7 +19,7 @@ namespace EdFiValidation.ApiProxy.Core.Queries
                 .GetServer()
                 .GetDatabase(url.DatabaseName);
 
-            _collection = db.GetCollection<UseCase>("RequestResponsePair");
+            _collection = db.GetCollection<UseCase>();
         }
 
 

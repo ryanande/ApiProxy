@@ -1,5 +1,6 @@
 ﻿using EdFiValidation.ApiProxy.Core.Models;
 using EdFiValidation.ApiProxy.Core.Utility;
+using EdFiValidation.ApiProxy.Utilities;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace EdFiValidation.ApiProxy.Core.Queries
                 .GetServer()
                 .GetDatabase(url.DatabaseName);
 
-            _collection = db.GetCollection<RequestResponsePair>("RequestResponsePair");
+            _collection = db.GetCollection<RequestResponsePair>();
         }
 
 
@@ -26,7 +27,5 @@ namespace EdFiValidation.ApiProxy.Core.Queries
         {
             return _collection.AsQueryable().Where(l => l.SessionId == sessionId).ToList(); // this should expand to include paging and possibly filtering
         }
-
-
     }
 }

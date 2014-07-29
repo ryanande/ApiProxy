@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Web;
 using EdFiValidation.ApiProxy.Core.Models;
+using System.Configuration;
 
 namespace EdFiValidation.ApiProxy.Core.Utility
 {
@@ -83,18 +84,24 @@ namespace EdFiValidation.ApiProxy.Core.Utility
 
         public string ExtractSessionId(Uri uri)
         {
-            return uri.Segments.Count() - 1 < _config.SessionIdSegmentIndex ||
-                _config.SessionIdSegmentIndex < 0 ?
-                string.Empty :
-                uri.Segments[_config.SessionIdSegmentIndex].Replace("/", "");
+            if (_config.SessionIdSegmentIndex < 0)
+                throw new ConfigurationErrorsException("Invalid or missing SessionIdSegmentIndex value in ApiTransactionUtility._config");
+            
+            return uri.Segments.Count() - 1 < _config.SessionIdSegmentIndex
+                 ? string.Empty : uri.Segments[_config.SessionIdSegmentIndex].Replace("/", "");
         }
 
 
         public string ExtractDestination(Uri uri)
         {
-            if (uri.Segments.Count() - 1 < _config.DestinationUrlSegementIndex || _config.DestinationUrlSegementIndex < 0)
-                return null; // we may want to throw a custom exception here....
+            if (_config.DestinationUrlSegementIndex < 0)
+                throw new ConfigurationErrorsException("Invalid or missing DestinationUrlSegementIndex value in ApiTransactionUtility._config");
 
+            if (uri.Segments.Count() - 1 <= _config.DestinationUrlSegementIndex)
+            {
+                throw new CannotParseUriException("Error parsing URI. Not enough URI segments. {0} detected. At least {1} required. ", 
+                 uri.Segments.Count(), _config.DestinationUrlSegementIndex + 2); //+2 because index is 0-based and we need at least 1 segment after the destination url
+            }
 
             var dest = uri.Segments[_config.DestinationUrlSegementIndex].Replace("/", "");
             dest = WebUtility.UrlDecode(dest);
@@ -105,36 +112,55 @@ namespace EdFiValidation.ApiProxy.Core.Utility
 
         public string DecodeDestination(string encodedUrl)
         {
-            byte[] data = Convert.FromBase64String(encodedUrl);
-            string decodedUrl = Encoding.UTF8.GetString(data);
+            string decodedUrl;
+            try
+            {
+                byte[] data = Convert.FromBase64String(encodedUrl);
+                decodedUrl = Encoding.UTF8.GetString(data);
+            }
+            catch (FormatException ex)
+            {
+                throw new CannotParseUriException("Error while trying to decode destination url from Base-64 format. " + ex.Message);
+            }
+           
             return decodedUrl;
         }
 
 
         public Uri BuildDestinationUri(Uri uri)
         {
-            var path = uri.Segments.Skip(4).Aggregate((m, n) => m + n.Replace("/", "") + "/");
+            // decode url, should be fourth segment in the incoming uri
+            var destinationRoot = ExtractDestination(uri);
+            destinationRoot = destinationRoot.TrimEnd('/');
 
-      
-            // decode url, should be second item in array
-            var rootDestination = ExtractDestination(uri);
+            // the DestinationUrlSegementIndex+1 segment represents where the final destination's uri begins. We forward this and everything after it, unmodified
+            var destinationPath = uri.Segments.Skip(_config.DestinationUrlSegementIndex + 1).Aggregate((m, n) => m + n);
+            destinationPath = destinationPath.TrimStart('/').TrimEnd('/');
 
-            if (!rootDestination.EndsWith("/"))
-                rootDestination += "/";
-
-            var dest = new Uri(rootDestination + path);
-            
-            var uriBuilder = new UriBuilder
+            UriBuilder destinationUriBuilder;
+            try
             {
-                Scheme = dest.Scheme, 
-                Host = dest.Host,
-                Path = dest.AbsolutePath
-            };
+                destinationUriBuilder = new UriBuilder(destinationRoot);
+            }
+            catch (UriFormatException ex)
+            {
+                throw new CannotParseUriException("Decoded destination uri was invalid. " + ex.Message);
+            }
 
-            if (!string.IsNullOrWhiteSpace(uri.Query))
-                uriBuilder.Query = uri.Query.Replace("?", "");
+            Uri destinationUri;
+            try
+            {
+                destinationUriBuilder.Path += "/" + destinationPath;
+                if (!string.IsNullOrWhiteSpace(uri.Query))
+                    destinationUriBuilder.Query = uri.Query.Replace("?", "");
+                destinationUri = new Uri(destinationUriBuilder.Uri.ToString());
+            }
+            catch (UriFormatException ex)
+            {
+                throw new CannotParseUriException("Invalid uri segments or query string after the encoded uri. " + ex.Message);
+            }
 
-            return uriBuilder.Uri;
+            return destinationUri;
         }
     }
 }

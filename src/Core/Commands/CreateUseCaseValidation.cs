@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using EdFiValidation.ApiProxy.Core.Models;
 
 namespace EdFiValidation.ApiProxy.Core.Commands
 {
-    public class CreateApiLogItem : ICommand
+    public class CreateUseCaseValidation : ICommand
     {
         public Guid Id { get; set; }
+        public Guid ClientId { get; set; }
         public string SessionId { get; set; }
-        public ApiRequest ApiRequest { get; set; }
-        public ApiResponse ApiResponse { get; set; }
+
+        public List<UseCase> Cases { get; set; }
     }
 }

@@ -3,7 +3,7 @@
     public interface IValidationService
     {
         // vNext
-        //bool ValidateSession(Guid clientId, string sessionId);
-        void ValidateSession(string sessionId);
+        //bool Validate(Guid clientId, string sessionId);
+        void Validate(string sessionId);
     }
 }

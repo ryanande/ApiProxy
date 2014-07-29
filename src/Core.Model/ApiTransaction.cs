@@ -2,7 +2,7 @@
 
 namespace EdFiValidation.ApiProxy.Core.Models
 {
-    public class ApiTransaction
+    public class ApiTransaction: ModelBase
     {
         public string UriAccessed { get; set; }
         public string BodyContent { get; set; }

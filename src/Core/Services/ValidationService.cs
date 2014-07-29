@@ -1,5 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using EdFiValidation.ApiProxy.Core.Commands;
+using EdFiValidation.ApiProxy.Core.Handlers;
 using EdFiValidation.ApiProxy.Core.Queries;
+using EdFiValidation.ApiProxy.Core.Utility;
 
 namespace EdFiValidation.ApiProxy.Core.Services
 {
@@ -7,26 +11,41 @@ namespace EdFiValidation.ApiProxy.Core.Services
     {
         private readonly IRequestResponsePairQueryService _requestResponsePairQueryService;
         private readonly IUseCaseQueryService _useCaseQueryService;
+        private readonly ICommandHandler<CreateUseCaseValidation> _commandHandler;
 
-
-        public ValidationService(IRequestResponsePairQueryService requestResponsePairQueryService, IUseCaseQueryService useCaseQueryService)
+        public ValidationService(IRequestResponsePairQueryService requestResponsePairQueryService,
+                                    IUseCaseQueryService useCaseQueryService,
+                                    ICommandHandler<CreateUseCaseValidation> commandHandler)
         {
             _requestResponsePairQueryService = requestResponsePairQueryService;
             _useCaseQueryService = useCaseQueryService;
+            _commandHandler = commandHandler;
         }
-        public void ValidateSession(string sessionId)
+        public void Validate(string sessionId)
         {
-            // get the rrpairs
             var requestResponses = _requestResponsePairQueryService.GetOnSessionId(sessionId);
-            // get the use cases
             var useCases = _useCaseQueryService.GetAll();
-            // loop use cases
-            var passedUseCases = (from useCase in useCases 
-                let correctCounter = useCase.Items.Count(item => requestResponses.Any(r => r.ApiRequest.UriAccessed == item.Path)) 
-                where correctCounter == useCase.Items.Count 
-                select useCase).ToList();
+
+
+            // this is a very niaeve stab at the mathing rule.
+            var passedUseCases = (from useCase in useCases
+                                  let correctCounter = useCase.Items.Count(item => 
+                                      requestResponses.Any(r => 
+                                          string.Equals(r.ApiRequest.UriAccessed, item.Path, StringComparison.CurrentCultureIgnoreCase) && // path and
+                                          string.Equals(r.ApiRequest.HttpMethod, item.Method, StringComparison.CurrentCultureIgnoreCase))) // method
+                                  where correctCounter == useCase.Items.Count
+                                  select useCase).ToList();
+
 
             // persist the successes for the session (log em).
+            if (passedUseCases.Count > 0)
+                _commandHandler.Handle(new CreateUseCaseValidation
+                {
+                    Id = CombGuid.Generate(),
+                    ClientId = Guid.Empty,
+                    SessionId = sessionId,
+                    Cases = passedUseCases
+                });
         }
     }
 }
