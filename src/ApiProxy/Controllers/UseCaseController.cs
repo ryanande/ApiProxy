@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using EdFiValidation.ApiProxy.Core.Queries;
 using EdFiValidation.ApiProxy.Models;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace EdFiValidation.ApiProxy.Controllers
 {
@@ -16,7 +13,7 @@ namespace EdFiValidation.ApiProxy.Controllers
         {
             _useCaseQueryService = useCaseQueryService;
         }
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public ActionResult Index()
         {
             var transactions = _useCaseQueryService.GetAll();
