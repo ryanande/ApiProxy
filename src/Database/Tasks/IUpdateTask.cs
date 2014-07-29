@@ -1,5 +1,5 @@
 ﻿
-namespace Database.Update
+namespace Database.Tasks
 {
     public interface IUpdateTask : ITask
     {

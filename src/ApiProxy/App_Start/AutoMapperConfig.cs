@@ -12,6 +12,9 @@ namespace EdFiValidation.ApiProxy.App_Start
             Mapper.CreateMap<ApiRequest, ApiRequestModel>();
             Mapper.CreateMap<ApiResponse, ApiResponseModel>()
                 .ForMember(dest => dest.ResponseStatusCode, map => map.MapFrom(src => (int)src.ResponseStatusCode));
+
+            Mapper.CreateMap<UseCase, ApiUseCaseModel>();
+            Mapper.CreateMap<UseCaseItem, ApiUseCaseItemModel>();
         }
     }
 }

@@ -133,7 +133,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
             var destinationRoot = ExtractDestination(uri);
             destinationRoot = destinationRoot.TrimEnd('/');
 
-            // the DestinationUrlSegementIndex+1 segment represents where the final destination's uri begins. We forward this and everything after it, unmodified
+            // the DestinationUrlSegementIndex+1 segment represents where the final destination's local path begins. We forward this and everything after it, unmodified
             var destinationPath = uri.Segments.Skip(_config.DestinationUrlSegementIndex + 1).Aggregate((m, n) => m + n);
             destinationPath = destinationPath.TrimStart('/').TrimEnd('/');
 
@@ -153,6 +153,7 @@ namespace EdFiValidation.ApiProxy.Core.Utility
                 destinationUriBuilder.Path += "/" + destinationPath;
                 if (!string.IsNullOrWhiteSpace(uri.Query))
                     destinationUriBuilder.Query = uri.Query.Replace("?", "");
+
                 destinationUri = new Uri(destinationUriBuilder.Uri.ToString());
             }
             catch (UriFormatException ex)

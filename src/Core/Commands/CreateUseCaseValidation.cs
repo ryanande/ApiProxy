@@ -9,7 +9,6 @@ namespace EdFiValidation.ApiProxy.Core.Commands
         public Guid Id { get; set; }
         public Guid ClientId { get; set; }
         public string SessionId { get; set; }
-
         public List<UseCase> Cases { get; set; }
     }
 }
