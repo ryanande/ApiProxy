@@ -1,0 +1,30 @@
+﻿@model IEnumerable<EdFiValidation.ApiProxy.Models.ApiUseCaseModel>
+
+
+<br/>
+@if (Model.Any())
+{
+
+    <div class="row">
+        <div class="col-md-6">
+            @foreach (var useCase in Model)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@useCase.Title <small>@(useCase.IsOrdered ? "(Ordered)" : "")</small></h3>
+                    </div>
+                    <div class="panel-body">
+                        <strong>Description:</strong> @useCase.Description
+                        <h5>Paths</h5>
+                        <ul>
+                            @foreach (var item in useCase.Items)
+                            {
+                                <li>@item.Path (@item.Method)</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}    

@@ -184,6 +184,7 @@
     <Compile Include="Controllers\ApiLogController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProxyController.cs" />
+    <Compile Include="Controllers\UseCaseController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Models\ApiRequestModel.cs" />
     <Compile Include="Models\ApiResponseModel.cs" />
     <Compile Include="Models\ApiTransactionModel.cs" />
+    <Compile Include="Models\ApiUseCaseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -260,6 +262,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
+    <Content Include="Views\UseCase\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.Model\Core.Model.csproj">
