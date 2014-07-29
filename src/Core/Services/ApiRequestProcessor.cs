@@ -39,14 +39,14 @@ namespace EdFiValidation.ApiProxy.Core.Services
             {
                 uri = _apiTransactionUtility.BuildDestinationUri(request.RequestUri);
             }
-            catch (CannotParseUriException ex)
+            catch (Exception ex)
             {
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError) { ReasonPhrase = ex.Message };
+                //CannotParseUriException may be a good candidate for a 400 responce: "The request cannot be fulfilled due to bad syntax."
+                if (ex is CannotParseUriException || ex is ConfigurationErrorsException)
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError) { ReasonPhrase = ex.Message };
+                throw;
             }
-            catch (ConfigurationErrorsException ex)
-            {
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError) { ReasonPhrase = ex.Message };
-            }
+            
             request.RequestUri = uri;
 
             using (var client = new HttpClient())
