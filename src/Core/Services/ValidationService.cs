@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using EdFiValidation.ApiProxy.Core.Commands;
 using EdFiValidation.ApiProxy.Core.Handlers;
+using EdFiValidation.ApiProxy.Core.Models;
 using EdFiValidation.ApiProxy.Core.Queries;
 using EdFiValidation.ApiProxy.Core.Utility;
 
@@ -21,7 +24,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
             _useCaseQueryService = useCaseQueryService;
             _commandHandler = commandHandler;
         }
-        public void Validate(string sessionId)
+        public IEnumerable<UseCase> Validate(string sessionId)
         {
             var requestResponses = _requestResponsePairQueryService.GetOnSessionId(sessionId);
             var useCases = _useCaseQueryService.GetAll();
@@ -46,6 +49,8 @@ namespace EdFiValidation.ApiProxy.Core.Services
                     SessionId = sessionId,
                     Cases = passedUseCases
                 });
+
+            return passedUseCases;
         }
     }
 }
