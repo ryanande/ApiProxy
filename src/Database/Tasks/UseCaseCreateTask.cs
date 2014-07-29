@@ -5,7 +5,7 @@ using EdFiValidation.ApiProxy.Core.Models;
 using EdFiValidation.ApiProxy.Utilities;
 using MongoDB.Driver;
 
-namespace Database.Create
+namespace Database.Tasks
 {
     public class UseCaseCreateTask : ICreateTask
     {
@@ -22,7 +22,6 @@ namespace Database.Create
                 .GetServer()
                 .GetDatabase(url.DatabaseName);
 
-
             _useCases = useCases;
         }
 
@@ -35,7 +34,5 @@ namespace Database.Create
             if (action != null)
                 action.Invoke("UseCaseCreateTask Complete.");
         }
-
-
     }
 }

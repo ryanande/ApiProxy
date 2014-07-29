@@ -1,7 +1,6 @@
-﻿
-using System;
+﻿using System;
 
-namespace Database
+namespace Database.Tasks
 {
     public interface ITask
     {

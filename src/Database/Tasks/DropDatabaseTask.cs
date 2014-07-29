@@ -1,7 +1,7 @@
 ﻿using System;
 using MongoDB.Driver;
 
-namespace Database.Create
+namespace Database.Tasks
 {
     public class DropDatabaseTask : ITask
     {

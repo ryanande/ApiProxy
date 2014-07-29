@@ -1,12 +1,12 @@
-﻿using Database.Data;
+﻿using System;
+using System.Linq;
+using Database.Data;
 using EdFiValidation.ApiProxy.Core.Models;
 using EdFiValidation.ApiProxy.Utilities;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using System;
-using System.Linq;
 
-namespace Database.Update
+namespace Database.Tasks
 {
     public class UseCaseUpdateTask : IUpdateTask
     {
