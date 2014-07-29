@@ -10,6 +10,5 @@ namespace EdFiValidation.ApiProxy.Models
         public string SessionId { get; set; }
         public int TotalRequests { get; set; }
         public int RequestErrors { get; set; }
-        public List<ApiLogModel> LogEntries { get; set; }
     }
 }
