@@ -1,0 +1,48 @@
+﻿@model string
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class=" text-center well well-sm">
+            <h3>Session</h3>
+            <span data-bind="text: sessionId"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class=" text-center well well-sm">
+            <h3>Total Requests</h3>
+            <span data-bind="text: requestCount"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class=" text-center well well-sm">
+            <h3>Total Errors</h3>
+            <span data-bind="text: requestErrors"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="well">
+            <button class="btn btn-info center-block" data-bind="click: validateSession">Validate Session</button>
+        </div>
+    </div>
+</div>
+
+<div id="valResults" class="row">
+
+
+
+</div>
+
+@section scripts
+{
+
+    @Scripts.Render("~/bundles/ko");
+    @Scripts.Render("~/bundles/validate");
+    <script type="text/javascript">
+        var sessionId = "@Model"; // don't like this
+    </script>
+}

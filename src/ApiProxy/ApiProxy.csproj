@@ -185,6 +185,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProxyController.cs" />
     <Compile Include="Controllers\UseCaseController.cs" />
+    <Compile Include="Controllers\ValidateSessionController.cs" />
+    <Compile Include="Controllers\ValidationRunController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -239,11 +241,14 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Scripts\knockout-3.1.0.debug.js" />
+    <Content Include="Scripts\knockout-3.1.0.js" />
     <Content Include="Scripts\modernizr-2.7.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\validateSession.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -263,6 +268,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <Content Include="Views\UseCase\Index.cshtml" />
+    <Content Include="Views\ValidateSession\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.Model\Core.Model.csproj">
