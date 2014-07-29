@@ -21,7 +21,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
             _useCaseQueryService = useCaseQueryService;
             _commandHandler = commandHandler;
         }
-        public void ValidateSession(string sessionId)
+        public void Validate(string sessionId)
         {
             var requestResponses = _requestResponsePairQueryService.GetOnSessionId(sessionId);
             var useCases = _useCaseQueryService.GetAll();
@@ -32,7 +32,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
                                   let correctCounter = useCase.Items.Count(item => 
                                       requestResponses.Any(r => 
                                           string.Equals(r.ApiRequest.UriAccessed, item.Path, StringComparison.CurrentCultureIgnoreCase) && // path and
-                                          string.Equals(r.ApiRequest.HttpMethod, item.Method, StringComparison.CurrentCultureIgnoreCase))) // method match
+                                          string.Equals(r.ApiRequest.HttpMethod, item.Method, StringComparison.CurrentCultureIgnoreCase))) // method
                                   where correctCounter == useCase.Items.Count
                                   select useCase).ToList();
 
