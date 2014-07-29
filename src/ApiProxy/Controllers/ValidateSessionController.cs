@@ -8,8 +8,8 @@ namespace EdFiValidation.ApiProxy.Controllers
 {
     public class ValidateSessionController : Controller
     {
-        
-        [Route("/ValidateSession/{id}")]
+
+        [Route("validatesession/{id}")]
         public ActionResult Index(string id)
         {
             return View();
