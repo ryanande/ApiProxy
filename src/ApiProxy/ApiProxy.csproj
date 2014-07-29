@@ -201,6 +201,8 @@
     <Compile Include="Models\ApiResponseModel.cs" />
     <Compile Include="Models\ApiTransactionModel.cs" />
     <Compile Include="Models\ApiUseCaseModel.cs" />
+    <Compile Include="Models\ApiValidationIndexModel.cs" />
+    <Compile Include="Models\UseCaseValidationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,12 @@ namespace EdFiValidation.ApiProxy
                 new { controller = "proxy" }
             );
 
+            config.Routes.MapHttpRoute(
+                "ValidationRun",
+                "ValidationRun/{*tags}",
+                new { controller = "ValidationRun" }
+            );
+
             config.ParameterBindingRules.Add(typeof(string[]), descriptor => new CatchAllRouteBinding(descriptor, '/'));
         }
     }
