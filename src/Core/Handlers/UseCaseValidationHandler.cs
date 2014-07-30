@@ -6,7 +6,7 @@ using MongoDB.Driver;
 
 namespace EdFiValidation.ApiProxy.Core.Handlers
 {
-    class UseCaseValidationHandler : ICommandHandler<CreateUseCaseValidation>
+    public class UseCaseValidationHandler : ICommandHandler<CreateUseCaseValidation>
     {
         private readonly MongoDatabase _db;
 
