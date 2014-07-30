@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using EdFiValidation.ApiProxy.Core.Commands;
 using EdFiValidation.ApiProxy.Core.Handlers;
 using EdFiValidation.ApiProxy.Core.Models;
@@ -35,7 +36,8 @@ namespace EdFiValidation.ApiProxy.Core.Services
                                   let correctCounter = useCase.Items.Count(item => 
                                       requestResponses.Any(r => 
                                           string.Equals(new Uri(r.ApiResponse.UriAccessed).AbsolutePath, item.Path, StringComparison.CurrentCultureIgnoreCase) && // path and
-                                          string.Equals(r.ApiRequest.HttpMethod, item.Method, StringComparison.CurrentCultureIgnoreCase))) // method
+                                          string.Equals(r.ApiRequest.HttpMethod, item.Method, StringComparison.CurrentCultureIgnoreCase) && // method
+                                          ((int)r.ApiResponse.ResponseStatusCode).ToString().StartsWith("20"))) // response code
                                   where correctCounter == useCase.Items.Count
                                   select useCase).ToList();
 
@@ -49,7 +51,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
                     SessionId = sessionId,
                     Cases = passedUseCases
                 });
-
+        
             return passedUseCases;
         }
     }
