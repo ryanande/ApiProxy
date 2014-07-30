@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using EdFiValidation.ApiProxy.Core.Models;
 
 namespace EdFiValidation.ApiProxy.Models
 {
-    public class UseCaseValidationModel
+    public class UseCaseValidationModel : ModelBase
     {
         public Guid UseCaseId { get; set; }
         public string Title { get; set; }

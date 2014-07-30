@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using EdFiValidation.ApiProxy.Core.Models;
 
 namespace EdFiValidation.ApiProxy.Models
 {
-    public class ApiValidationIndexModel
+    public class ApiValidationIndexModel : ModelBase
     {
         public string SessionId { get; set; }
         public int TotalRequests { get; set; }
