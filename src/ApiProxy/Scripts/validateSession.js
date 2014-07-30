@@ -24,7 +24,6 @@ viewModel.prototype.loadData = function () {
         success: function (result) {
             self.requestCount(result.TotalRequests);
             self.errorCount(result.RequestErrors);
-            toastr.success("Loaded validation use case results", "Success!");
         },
         error: function (jqXHR, textStatus, errorThrow) {
             self.isLoading(false);
@@ -37,24 +36,25 @@ viewModel.prototype.loadData = function () {
 
 viewModel.prototype.runValidation = function () {
 
-    //var self = this;
-    //self.isLoading(true);
+    var self = this;
+    self.isLoading(true);
 
-    //$.ajax({
-    //    type: 'GET',
-    //    url: '/validateRun/' + self.sessionId(),
-    //    dataType: 'json',
-    //    success: function (result) {
-    //        self.validUseCases(ko.mapping.fromJS(result));
-    //        toastr.success("Loaded validation use case results", "Success!");
-    //    },
-    //    error: function (jqXHR, textStatus, errorThrow) {
-    //        self.isLoading(false);
-    //        toastr.error(errorThrow, "Err");
-    //    }
-    //}).done(function () {
-    //    self.isLoading(false);
-    //});
+    $.ajax({
+        type: 'GET',
+        url: '/ExecuteValidation/' + self.sessionId(),
+        dataType: 'json',
+        success: function (result) {
+            var i = ko.mapping.fromJS(result);
+            self.validUseCases(i);
+            toastr.success("Loaded validation use case results", "Success!");
+        },
+        error: function (jqXHR, textStatus, errorThrow) {
+            self.isLoading(false);
+            toastr.error(errorThrow, "Err");
+        }
+    }).done(function () {
+        self.isLoading(false);
+    });
 };
 
 ko.bindingHandlers.fadeVisible = {

@@ -34,7 +34,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
             var passedUseCases = (from useCase in useCases
                                   let correctCounter = useCase.Items.Count(item => 
                                       requestResponses.Any(r => 
-                                          string.Equals(r.ApiRequest.UriAccessed, item.Path, StringComparison.CurrentCultureIgnoreCase) && // path and
+                                          string.Equals(new Uri(r.ApiResponse.UriAccessed).AbsolutePath, item.Path, StringComparison.CurrentCultureIgnoreCase) && // path and
                                           string.Equals(r.ApiRequest.HttpMethod, item.Method, StringComparison.CurrentCultureIgnoreCase))) // method
                                   where correctCounter == useCase.Items.Count
                                   select useCase).ToList();
