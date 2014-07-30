@@ -14,7 +14,7 @@ namespace EdFiValidation.ApiProxy.Controllers
     {
         private readonly IRequestResponsePairQueryService _requestResponseRepo;
         private readonly IUseCaseQueryService _useCaseRepo;
-        private readonly ICommandHandler<CreateUseCaseValidation> _commandHandler;
+        private readonly ICommandHandler<CreateUseCaseValidation> _commandHandler; //me thinks the runtime is choking on this. Am I missing a concrete factory? Abstract Class? 
 
         public ValidationRunController(IRequestResponsePairQueryService pairs, IUseCaseQueryService useCaseQueryService, ICommandHandler<CreateUseCaseValidation> commandHandler)
         {
@@ -47,14 +47,19 @@ namespace EdFiValidation.ApiProxy.Controllers
             var passedUseCases = validationService.Validate(id).ToList();
             var model = new List<UseCaseValidationModel>();
 
-            foreach (UseCase passedUseCase in passedUseCases)
+            foreach (var passedUseCase in passedUseCases) //this loops smells in at least two funny ways
             {
+                var passedUseCaseItemModels = passedUseCase.Items.Select(useCaseItem => new ApiUseCaseItemModel
+                    {
+                        Id = useCaseItem.Id, Method = useCaseItem.Method, Path = useCaseItem.Path
+                    }).ToList();
+
                 var passedUseCaseModel = new UseCaseValidationModel
                 {
                     UseCaseId = passedUseCase.Id,
                     Title = passedUseCase.Title, 
-                    Description = passedUseCase.Description, 
-                    //Items = passedCase.Items
+                    Description = passedUseCase.Description,
+                    Items = passedUseCaseItemModels
                 };
 
                 model.Add(passedUseCaseModel);
