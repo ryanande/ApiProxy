@@ -41,12 +41,11 @@ namespace EdFiValidation.ApiProxy.Controllers
             return model;
         }
 
-        [Route("~/ValidateRun/Execute/{id}")] 
+        [Route("~/ValidationRun/Execute/{id}")] 
         [HttpGet]
         public List<UseCaseValidationModel> Execute(string id)
         {
             var passedUseCases = _validationService.Validate(id).ToList();
-            //var passedUseCases = _useCaseRepo.GetAll().ToList(); //sweet shortcut hack
             var passedUseCaseModels = Mapper.Map<List<UseCaseValidationModel>>(passedUseCases);
             
             return passedUseCaseModels;
