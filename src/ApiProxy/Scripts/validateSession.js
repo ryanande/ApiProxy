@@ -41,7 +41,7 @@ viewModel.prototype.runValidation = function () {
 
     $.ajax({
         type: 'GET',
-        url: '/ExecuteValidation/' + self.sessionId(),
+        url: '/ValidationRun/Execute/' + self.sessionId(),
         dataType: 'json',
         success: function (result) {
             var i = ko.mapping.fromJS(result);

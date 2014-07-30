@@ -41,24 +41,14 @@ namespace EdFiValidation.ApiProxy.Controllers
             return model;
         }
 
-        [Route("~/ExecuteValidation/{id}")]
+        [Route("~/ValidationRun/Execute/{id}")] 
         [HttpGet]
-        public List<UseCaseValidationModel> ExecuteValidation(string id)
+        public List<UseCaseValidationModel> Execute(string id)
         {
             var passedUseCases = _validationService.Validate(id).ToList();
-            //var passedUseCases = _useCaseRepo.GetAll().ToList(); //sweet shortcut hack
-            var model = new List<UseCaseValidationModel>();
-
-            foreach (var passedUseCase in passedUseCases) //this loops smells less funny than before
-            {
-                var passedUseCaseItemModels = Mapper.Map<List<ApiUseCaseItemModel>>(passedUseCase.Items);                
-
-                var passedUseCaseModel = Mapper.Map<UseCaseValidationModel>(passedUseCase);
-                passedUseCaseModel.Items = passedUseCaseItemModels;
-
-                model.Add(passedUseCaseModel);
-            }
-        return model;
+            var passedUseCaseModels = Mapper.Map<List<UseCaseValidationModel>>(passedUseCases);
+            
+            return passedUseCaseModels;
         }
     }
 }
