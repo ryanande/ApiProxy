@@ -15,6 +15,8 @@ namespace EdFiValidation.ApiProxy.App_Start
 
             Mapper.CreateMap<UseCase, ApiUseCaseModel>();
             Mapper.CreateMap<UseCaseItem, ApiUseCaseItemModel>();
+            Mapper.CreateMap<UseCase, UseCaseValidationModel>()
+                  .ForMember(dest => dest.UseCaseId, map => map.MapFrom(src => src.Id));
         }
     }
 }

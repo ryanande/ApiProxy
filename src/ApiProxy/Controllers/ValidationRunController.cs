@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using EdFiValidation.ApiProxy.Core.Commands;
 using EdFiValidation.ApiProxy.Core.Handlers;
-using EdFiValidation.ApiProxy.Core.Models;
 using EdFiValidation.ApiProxy.Core.Queries;
 using EdFiValidation.ApiProxy.Models;
 using EdFiValidation.ApiProxy.Core.Services;
+using AutoMapper;
 
 namespace EdFiValidation.ApiProxy.Controllers
 {
@@ -14,13 +15,15 @@ namespace EdFiValidation.ApiProxy.Controllers
     {
         private readonly IRequestResponsePairQueryService _requestResponseRepo;
         private readonly IUseCaseQueryService _useCaseRepo;
-        private readonly ICommandHandler<CreateUseCaseValidation> _commandHandler; //me thinks the runtime is choking on this. Am I missing a concrete factory? Abstract Class? 
+        private readonly ICommandHandler<CreateUseCaseValidation> _commandHandler;
+        private readonly IValidationService _validationService;
 
         public ValidationRunController(IRequestResponsePairQueryService pairs, IUseCaseQueryService useCaseQueryService, ICommandHandler<CreateUseCaseValidation> commandHandler)
         {
             _requestResponseRepo = pairs;
             _useCaseRepo = useCaseQueryService;
             _commandHandler = commandHandler;
+            _validationService = new ValidationService(_requestResponseRepo, _useCaseRepo, _commandHandler);
         }
 
         [Route("~/ValidateRun/{id}")]
@@ -42,40 +45,20 @@ namespace EdFiValidation.ApiProxy.Controllers
         [HttpGet]
         public List<UseCaseValidationModel> ExecuteValidation(string id)
         {
-            var validationService = new ValidationService(_requestResponseRepo, _useCaseRepo, _commandHandler);
-
-            var passedUseCases = validationService.Validate(id).ToList();
+            var passedUseCases = _validationService.Validate(id).ToList();
+            //var passedUseCases = _useCaseRepo.GetAll().ToList(); //sweet shortcut hack
             var model = new List<UseCaseValidationModel>();
 
-            foreach (var passedUseCase in passedUseCases) //this loops smells in at least two funny ways
+            foreach (var passedUseCase in passedUseCases) //this loops smells less funny than before
             {
-                var passedUseCaseItemModels = passedUseCase.Items.Select(useCaseItem => new ApiUseCaseItemModel
-                    {
-                        Id = useCaseItem.Id, Method = useCaseItem.Method, Path = useCaseItem.Path
-                    }).ToList();
+                var passedUseCaseItemModels = Mapper.Map<List<ApiUseCaseItemModel>>(passedUseCase.Items);                
 
-                var passedUseCaseModel = new UseCaseValidationModel
-                {
-                    UseCaseId = passedUseCase.Id,
-                    Title = passedUseCase.Title, 
-                    Description = passedUseCase.Description,
-                    Items = passedUseCaseItemModels
-                };
+                var passedUseCaseModel = Mapper.Map<UseCaseValidationModel>(passedUseCase);
+                passedUseCaseModel.Items = passedUseCaseItemModels;
 
                 model.Add(passedUseCaseModel);
             }
-
         return model;
         }
-
-        //-- Execute Validation
-        //List<UseCaseValidationModel>
-        //{
-        //  UseCaseId: "guid",
-        //  Title: "",
-        //  Description: "",
-        //  Items: List<UseCaseItemModel>		
-        //}
-
     }
 }
