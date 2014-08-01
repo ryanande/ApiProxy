@@ -1,0 +1,160 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <h1>Validation Proxy <br /><small>Ed-Fi REST API Validation Proxy Query Tool</small></h1>
+
+        <div class="input-group">
+            <input type="text" id="sessionId" name="sessionId" class="form-control" placeholder="Session Id..." data-bind="value: sessionId" />
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-info" data-bind="click: loadData">Search</button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="clearfix">&nbsp;</div>
+<div data-bind="visible: transactions().length > 0">
+    <div class="row">
+        <div class="col-md-4">
+            <div class=" text-center well well-sm">
+                <h3>Session</h3>
+                <span data-bind="text: sessionId"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class=" text-center well well-sm">
+                <h3>Total Requests</h3>
+                <span data-bind="text: requestCount"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class=" text-center well well-sm">
+                <h3>Total Errors</h3>
+                <span data-bind="text: errorCount"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well">
+                <button type="button" class="btn btn-info center-block">Validate Session</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-group" id="accordion" data-bind="foreach: transactions">
+
+        <!-- Trans Panel -->
+        <div class="panel panel-primary ">
+
+            <div class="panel-heading">
+                <div class="row">
+
+                    <div class="col-md-2">
+                        <a data-toggle="collapse" data-parent="#accordion" data-bind="attr: { href: '#' + Id + '_trans' }">
+                        </a> &nbsp;
+                        <span data-bind="css: $parent.labelStyle(ApiResponse.IsSuccessStatusCode), text: ApiRequest.HttpMethod"> </span>
+                    </div>
+                    <div class="col-md-8">
+                        <strong data-bind="text: $parent.parseUrl(ApiResponse.UriAccessed)"> </strong>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="pull-right"><small data-bind="text: $parent.formatDate(LogDate)"></small></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-collapse" data-bind="attr: { id: Id + '_trans' }">
+                <div class="panel-body">
+                    <!-- Main Body -->
+                    <div class="panel-group" data-bind="attr: { id: Id + '_accordion' }">
+                        <!-- REQUEST -->
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                &nbsp;
+                                <a data-toggle="collapse" data-bind="attr: { 'data-parent': '#' + Id + '_accordion', href: Id + '_req' }" class="collapsed"></a>
+                                <strong>REQUEST</strong>
+                            </div>
+                            <div data-bind="attr: { id: Id + '_req' }" class="panel-collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12 wrap">
+                                            <strong>URL</strong>
+                                            <div class="well wrapIt" data-bind="text: ApiRequest.UriAccessed">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <strong>Headers</strong>
+                                            <div class="well wrapIt">
+                                                <dl data-bind="foreach: ApiRequest.Headers">
+
+                                                    <dt data-bind="text: key"></dt>
+                                                    <dd data-bind="text: value"></dd>
+
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <strong>Body</strong>
+                                            <pre class="pre-scrollable" data-bind="text: ApiRequest.BodyContent"></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /REQUEST -->
+                        <!-- RESPONSE -->
+                        <div data-bind="css: $parent.panelStyle(ApiResponse.IsSuccessStatusCode)">
+                            <div class="panel-heading">
+                                &nbsp;
+                                <a data-toggle="collapse" data-bind="attr: { 'data-parent': '#' + Id + '_accordion', href: '#' + Id + '_res' }" class="collapsed"></a>
+                                <strong>RESPONSE</strong>
+                                <span class="pull-right">
+                                    <strong data-bind="text: ApiResponse.ResponseStatusCode"></strong> <span data-bind="text: ApiResponse.ResponseStatusMessage"></span>
+                                </span>
+                            </div>
+                            <div class="panel-collapse" data-bind="attr:{ id: Id + '_res' }">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12 wrap">
+                                            <strong>URL</strong>
+                                            <div class="well wrapIt" data-bind="text: ApiResponse.UriAccessed">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <strong>Headers</strong>
+                                            <div class="well wrapIt">
+                                                <dl data-bind="foreach: ApiResponse.Headers">
+                                                    <dt data-bind="text: key"></dt>
+                                                    <dd data-bind="text: value"></dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong>Body</strong>
+                                            <pre class="pre-scrollable" data-bind="text: ApiResponse.BodyContent"></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /RESPONSE -->
+                    </div>
+                    <!-- /Main Body -->
+                </div>
+            </div>
+        </div>
+        <!-- /Trans Panel -->
+
+    </div>
+</div>

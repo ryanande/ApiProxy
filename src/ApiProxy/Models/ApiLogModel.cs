@@ -2,7 +2,7 @@
 
 namespace EdFiValidation.ApiProxy.Models
 {
-    public class ApiLogModel
+    public class ApiLogModel : UiModelBase
     {
         public Guid Id { get; set; }
         public DateTime LogDate { get; set; }

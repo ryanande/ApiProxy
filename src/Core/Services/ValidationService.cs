@@ -33,8 +33,8 @@ namespace EdFiValidation.ApiProxy.Core.Services
 
             // this is a very niaeve stab at the mathing rule.
             var passedUseCases = (from useCase in useCases
-                                  let correctCounter = useCase.Items.Count(item => 
-                                      requestResponses.Any(r => 
+                                  let correctCounter = useCase.Items.Count(item =>
+                                      requestResponses.Any(r =>
                                           string.Equals(new Uri(r.ApiResponse.UriAccessed).AbsolutePath, item.Path, StringComparison.CurrentCultureIgnoreCase) && // path and
                                           string.Equals(r.ApiRequest.HttpMethod, item.Method, StringComparison.CurrentCultureIgnoreCase) && // method
                                           ((int)r.ApiResponse.ResponseStatusCode).ToString().StartsWith("20"))) // response code
@@ -51,7 +51,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
                     SessionId = sessionId,
                     Cases = passedUseCases
                 });
-        
+
             return passedUseCases;
         }
     }

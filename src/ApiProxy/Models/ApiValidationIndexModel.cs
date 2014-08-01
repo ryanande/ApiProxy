@@ -2,7 +2,7 @@
 
 namespace EdFiValidation.ApiProxy.Models
 {
-    public class ApiValidationIndexModel : ModelBase
+    public class ApiValidationIndexModel : UiModelBase
     {
         public string SessionId { get; set; }
         public int TotalRequests { get; set; }

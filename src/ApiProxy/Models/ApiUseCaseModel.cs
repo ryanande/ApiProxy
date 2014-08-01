@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EdFiValidation.ApiProxy.Models
 {
-    public class ApiUseCaseModel
+    public class ApiUseCaseModel : UiModelBase
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
