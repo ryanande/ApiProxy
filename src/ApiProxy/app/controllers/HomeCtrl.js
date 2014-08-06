@@ -11,6 +11,8 @@ define(['app'], function (app) {
 
         $scope.isSearch = isInSearch;
 
+        $scope.urlPath = getUrlPath;
+
 
         function getSessions() {
             queryFactory.getSessionData($scope.searchText).success(function (data) {
@@ -23,6 +25,11 @@ define(['app'], function (app) {
 
         function isInSearch() {
             return $scope.searchText.length > 0;
+        }
+
+        function getUrlPath(url) {
+            var path = new URL(url);
+            return path.pathname;
         }
     });
 });

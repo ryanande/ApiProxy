@@ -49,25 +49,38 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" ng-repeat="session in sessions">
 
 
         <div class="panel panel-info">
-            <div class="panel-heading">Transaction</div>
+            <div class="panel-heading"><span class="label label-success">{{ session.ApiRequest.HttpMethod }}</span> <strong>Transaction: </strong> {{ urlPath(session.ApiResponse.UriAccessed) }} <span class="pull-right">{{ session.LogDate }}</span></div>
             <div class="panel-body">
-           
-                
+
+
                 <div class="panel panel-warning">
-                    <div class="panel-heading">Request</div>
+                    <div class="panel-heading"><strong>Request</strong></div>
                     <div class="panel-body">
-                        Panel content
+
+                        <div class="well">
+                            <strong>UriAccessed:</strong>
+                            <br />
+                            {{ session.ApiRequest.UriAccessed }}
+                        </div>
+
+
+                        <pre>{{ session.ApiRequest.BodyContent }}</pre>
                     </div>
                 </div>
-                
+
                 <div class="panel panel-danger">
-                    <div class="panel-heading">Response</div>
+                    <div class="panel-heading"><strong>Response</strong></div>
                     <div class="panel-body">
-                        Panel content
+                        <div class="well">
+                            <strong>UriAccessed:</strong>
+                            <br />
+                            {{ session.ApiResponse.UriAccessed }}
+                        </div>
+                        <pre>{{ session.ApiResponse.BodyContent }}</pre>
                     </div>
                 </div>
             </div>
