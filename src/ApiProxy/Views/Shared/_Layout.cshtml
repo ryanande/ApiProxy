@@ -1,18 +1,17 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <title>Ed-Fi Alliance, LLC</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Ed-Fi Alliance, LLC REST API Validation Proxy">
-    <meta name="author" content="Headspring">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Splash</title>
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+
     @Styles.Render("~/Content/css")
 </head>
 <body>
-    <div id="wrapper">
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -20,62 +19,36 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Ed-Fi Alliance - API Validation Proxy</a>
+                <a class="navbar-brand" href="#"><img src="@Url.Content("~/Content/images/edfilogo.png")" alt="ed-fi alliance, llc" /> </a>
             </div>
-            <!-- /.navbar-header -->
-            <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li>
-                            <a href="#profile"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li>
-                            <a href="#settings"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#login"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
-            <!-- /.navbar-top-links -->
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="SessionId...">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
-                            <!-- /input-group -->
-                        </li>
-                        <!-- ko foreach: router.navRoutes -->
-                        <li data-bind="css: { active: isActive }">
-                            <a data-bind="attr: { href: config.href }"><i data-bind="css: config.icon"></i> <span data-bind="text: config.title"></span></a>
-                        </li>
-                        <!-- /ko -->
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#/sessions">Sessions</a></li>
+                    <li><a href="#/usecases">Use Cases</a></li>
+                </ul>
             </div>
-            <!-- /.navbar-static-side -->
-        </nav>
-        <div id="page-wrapper">
-            @RenderBody()
+            <!--/.nav-collapse -->
         </div>
-        <!-- /#page-wrapper -->
     </div>
-    <!-- /#wrapper -->
-    <script src="@Url.Content("~/Scripts/require.js")" data-main="@Url.Content("~/app")"></script>
+
+    <!-- Begin page content -->
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p class="text-muted">&copy; @(DateTime.Now.Year == 2014 ? "2014" : "2014-" + DateTime.Now.Year) Ed-Fi Alliance, LLC.</p>
+        </div>
+    </div>
+    <script src="@Url.Content("~/Scripts/require.js")" data-main="@Url.Content("~/scripts/main")"></script>
 </body>
 </html>
+
+
+
+
+
+
+

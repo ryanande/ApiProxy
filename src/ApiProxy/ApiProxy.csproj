@@ -143,6 +143,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\directives\" />
+    <Folder Include="app\filters\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
@@ -208,7 +210,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app.js" />
+    <Content Include="app\app.js" />
+    <Content Include="app\controllers\ErrorCtrl.js" />
+    <Content Include="app\controllers\HomeCtrl.js" />
+    <Content Include="app\controllers\SessionCtrl.js" />
+    <Content Include="app\controllers\SessionsCtrl.js" />
+    <Content Include="app\controllers\UseCaseCtrl.js" />
+    <Content Include="app\controllers\UseCasesCtrl.js" />
+    <Content Include="app\services\commandFactory.js" />
+    <Content Include="app\services\logService.js" />
+    <Content Include="app\services\queryFactory.js" />
+    <Content Include="app\views\error.html" />
+    <Content Include="app\views\home.html" />
+    <Content Include="app\views\session.html" />
+    <Content Include="app\views\sessions.html" />
+    <Content Include="app\views\useCase.html" />
+    <Content Include="app\views\useCases.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -216,6 +233,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\images\edfilogo.png" />
+    <Content Include="Content\loading-bar.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -248,22 +267,34 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="Scripts\angular-animate.js" />
+    <Content Include="Scripts\angular-animate.min.js" />
+    <Content Include="Scripts\angular-loading-bar.min.js" />
+    <Content Include="Scripts\angular-logX.min.js" />
+    <Content Include="Scripts\angular-resource.js" />
+    <Content Include="Scripts\angular-resource.min.js" />
+    <Content Include="Scripts\angular-route.js" />
+    <Content Include="Scripts\angular-route.min.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="Scripts\angular-route.min.js.map" />
+    <Content Include="Scripts\angular-animate.min.js.map" />
+    <Content Include="Scripts\angular-resource.min.js.map" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angularAMD.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
-    <Content Include="Scripts\metisMenu.js" />
+    <Content Include="Scripts\main.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\r.js" />
     <Content Include="Scripts\require.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.matchmedia.addListener.js" />
-    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
-    <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\text.js" />
     <Content Include="Scripts\validateSession.js" />
     <Content Include="Web.config">
@@ -284,8 +315,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
-    <Content Include="Views\UseCase\Index.cshtml" />
-    <Content Include="Views\ValidateSession\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.Model\Core.Model.csproj">
