@@ -1,6 +1,10 @@
-﻿using EdFiValidation.ApiProxy.Core.Queries;
+﻿using System.Collections;
+using System.Collections.Generic;
+using AutoMapper;
+using EdFiValidation.ApiProxy.Core.Queries;
 using EdFiValidation.ApiProxy.Core.Services;
 using System.Web.Http;
+using EdFiValidation.ApiProxy.Models;
 
 namespace EdFiValidation.ApiProxy.Controllers
 {
@@ -22,9 +26,9 @@ namespace EdFiValidation.ApiProxy.Controllers
 
         [Route("~/command/validate/{id}")]
         [HttpGet]
-        public void Execute(string id)
+        public IEnumerable<ValidationCaseModel> Execute(string id)
         {
-            _validationService.Validate(id);
+            return Mapper.Map<List<ValidationCaseModel>>(_validationService.Validate(id));
         }
     }
 }

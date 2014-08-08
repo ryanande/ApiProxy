@@ -20,6 +20,7 @@ namespace EdFiValidation.ApiProxy.Core.Models
     public class ValidationUseCase : ModelBase
     {
         public string Title { get; set; }
+        public string Description { get; set; }
         public List<ValidationUseCaseItem> Items { get; set; } 
         
         public override string ToString()
@@ -32,6 +33,7 @@ namespace EdFiValidation.ApiProxy.Core.Models
     {
         public string Path { get; set; }
         public string Method { get; set; }
+        public bool IsPassed { get; set; }
         
         public override string ToString()
         {

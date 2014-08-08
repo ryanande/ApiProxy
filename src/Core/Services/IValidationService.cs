@@ -7,6 +7,6 @@ namespace EdFiValidation.ApiProxy.Core.Services
     {
         // vNext
         //bool Validate(Guid clientId, string sessionId);
-        IEnumerable<UseCase> Validate(string sessionId);
+        IEnumerable<ValidationUseCase> Validate(string sessionId);
     }
 }

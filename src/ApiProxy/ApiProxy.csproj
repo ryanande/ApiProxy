@@ -213,8 +213,7 @@
     <Content Include="app\app.js" />
     <Content Include="app\controllers\ErrorCtrl.js" />
     <Content Include="app\controllers\HomeCtrl.js" />
-    <Content Include="app\controllers\SessionCtrl.js" />
-    <Content Include="app\controllers\SessionsCtrl.js" />
+    <Content Include="app\controllers\ValidateCtrl.js" />
     <Content Include="app\controllers\UseCaseCtrl.js" />
     <Content Include="app\controllers\UseCasesCtrl.js" />
     <Content Include="app\services\commandFactory.js" />
@@ -222,10 +221,9 @@
     <Content Include="app\services\queryFactory.js" />
     <Content Include="app\views\error.html" />
     <Content Include="app\views\home.html" />
-    <Content Include="app\views\session.html" />
-    <Content Include="app\views\sessions.html" />
     <Content Include="app\views\useCase.html" />
     <Content Include="app\views\useCases.html" />
+    <Content Include="app\views\validate.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -288,6 +286,9 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <None Include="Scripts\linq-vsdoc.js" />
+    <Content Include="Scripts\linq.js" />
+    <Content Include="Scripts\linq.min.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />

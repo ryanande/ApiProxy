@@ -1,4 +1,4 @@
-define(['angularAMD', 'angular-route', 'angular-loading-bar', 'angular-animate', 'services/queryFactory'], function (angularAMD) {
+define(['angularAMD', 'angular-route', 'angular-loading-bar', 'angular-animate', 'jquery', 'bootstrap', 'linq', 'services/queryFactory', 'services/commandFactory'], function (angularAMD) {
 
     var app = angular.module('app', ['ngRoute', 'angular-loading-bar', 'ngAnimate'])
         .config(['$routeProvider', function ($routeProvider) {
@@ -14,17 +14,11 @@ define(['angularAMD', 'angular-route', 'angular-loading-bar', 'angular-animate',
                     templateUrl: 'app/views/error.html',
                     controller: 'ErrorCtrl'
                 }));
-
-            $routeProvider.when('/sessions',
+            
+            $routeProvider.when('/validate/:sessionId',
                 angularAMD.route({
-                    templateUrl: 'app/views/sessions.html',
-                    controller: 'SessionsCtrl'
-                }));
-
-            $routeProvider.when('/session/:sessionId',
-                angularAMD.route({
-                    templateUrl: 'app/views/session.html',
-                    controller: 'SessionCtrl'
+                    templateUrl: 'app/views/validate.html',
+                    controller: 'ValidateCtrl'
                 }));
 
             $routeProvider.when('/usecases',
@@ -39,24 +33,10 @@ define(['angularAMD', 'angular-route', 'angular-loading-bar', 'angular-animate',
                     controller: 'UseCaseCtrl'
                 }));
 
-
             $routeProvider.otherwise({
                 redirectTo: '/error/404'
             });
-
         }]);
-
-//    app.factory('queryFactory', ['$http', function ($http) {
-//
-//        var queryUrl = '/api/query/';
-//        var queryFactory = {};
-//
-//        queryFactory.getSessionData = function (sessionId) {
-//            return $http.get(queryUrl + 'sessions/' + sessionId);
-//        };
-//
-//        return queryFactory;
-//    }]);
 
     angularAMD.bootstrap(app);
 

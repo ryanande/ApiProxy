@@ -5,31 +5,56 @@ define(['app'], function (app) {
         $scope.pageTitle = "Validation API Proxy";
         $scope.pageSubTitle = "Session Validator";
         $scope.searchText = "";
+        $scope.currentSession = "";
         $scope.sessions = [];
+        $scope.totalSessions = sessionCount;
+        $scope.totalErrors = sessionErrors;
+
+        $scope.isSearch = isInSearch;
+        $scope.urlPath = getUrlPath;
+        $scope.getLabel = getLabel;
+        $scope.getIcon = getIcon;
 
         $scope.searchClick = getSessions;
 
-        $scope.isSearch = isInSearch;
-
-        $scope.urlPath = getUrlPath;
-
 
         function getSessions() {
-            queryFactory.getSessionData($scope.searchText).success(function (data) {
+            $scope.currentSession = $scope.searchText;
+
+            queryFactory.getSessionData($scope.currentSession).success(function (data) {
                 $scope.sessions = data;
             }).error(function (err) {
-                //TODO: toastr?
                 $log.error(err);
             });
         }
+
+
+
+        function sessionCount() {
+            return $scope.sessions.length;
+        }
+
+        function sessionErrors() {
+            return $scope.sessions.filter(function (item) { return !item.ApiResponse.IsSuccessStatusCode; }).length;
+        };
 
         function isInSearch() {
             return $scope.searchText.length > 0;
         }
 
+
         function getUrlPath(url) {
             var path = new URL(url);
             return path.pathname;
         }
+
+        function getLabel(isSuccess) {
+            return isSuccess ? 'label label-success' : 'label label-danger';
+        }
+
+        function getIcon(isSuccess) {
+            return isSuccess ? "glyphicon glyphicon-ok" : "glyphicon glyphicon-remove";
+        }
+
     });
 });
