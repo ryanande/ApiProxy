@@ -22,7 +22,7 @@
         <div class="col-md-8  col-md-offset-2">
             <div class="row">
                 <div class="col-md-3 ">
-                    <div class="panel panel-info">
+                    <div class="panel panel-default">
                         <div class="panel-heading text-center"><strong># Requests</strong></div>
                         <div class="panel-body text-center">
                             {{ totalSessions() }}
@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-md-offset-1 ">
-                    <div class="panel panel-info">
+                    <div class="panel panel-default">
                         <div class="panel-heading text-center"><strong>Session Id</strong></div>
                         <div class="panel-body text-center">
                             {{ currentSession }}
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-md-offset-1">
-                    <div class="panel panel-info">
+                    <div class="panel panel-default">
                         <div class="panel-heading text-center"><strong># Errors</strong></div>
                         <div class="panel-body text-center">
                             {{ totalErrors() }}
@@ -65,7 +65,7 @@
                         &nbsp;
                         {{ urlPath(session.ApiResponse.UriAccessed) }}
                     </strong>
-                    <span class="pull-right">{{ session.LogDate }}</span>
+                    <span class="pull-right">{{ formatDate(session.LogDate) }}</span>
 
                 </div>
                 <div id="panel_{{ session.Id }}" class="panel-collapse collapse">
@@ -78,25 +78,32 @@
                             </div>
                             <div id="request_{{ session.Id }}" class="panel-collapse collapse ">
                                 <div class="panel-body">
-                                    <strong>
-                                        Uri Accessed
-                                    </strong><br />
-                                    {{ session.ApiRequest.UriAccessed }}
-                                    <br />
-                                    <strong>
-                                        Headers
-                                    </strong>
-                                    <br />
-                                    <ul>
-                                        <li ng-repeat="header in session.ApiRequest.Headers">
-                                            <strong>{{ header.Key }}:</strong> {{ header.Value }}
-                                        </li>
-                                    </ul>
-                                    <strong>
-                                        Body
-                                    </strong>
-                                    <br />
-                                    <pre class="pre-scrollable">{{ session.ApiRequest.BodyContent }}</pre>
+                                    <p>
+                                        <strong class="text-info">
+                                            Uri Accessed
+                                        </strong><br />
+                                        {{ session.ApiRequest.UriAccessed }}
+
+                                    </p>
+                                    <p>
+                                        <strong class="text-info">
+                                            Headers
+                                        </strong>
+                                        <br />
+
+                                        <ul>
+                                            <li ng-repeat="header in session.ApiRequest.Headers">
+                                                <strong>{{ header.Key }}:</strong> {{ header.Value }}
+                                            </li>
+                                        </ul>
+                                    </p>
+                                    <p>
+                                        <strong class="text-info">
+                                            Body
+                                        </strong>
+                                        <br />
+                                        <pre class="pre-scrollable">{{ session.ApiRequest.BodyContent }}</pre>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -107,25 +114,32 @@
                             </div>
                             <div id="response_{{ session.Id }}" class="panel-collapse collapse ">
                                 <div class="panel-body">
-                                    <strong>
-                                        Uri Accessed
-                                    </strong><br />
-                                    {{ session.ApiResponse.UriAccessed }}
-                                    <br />
-                                    <strong>
-                                        Headers
-                                    </strong>
-                                    <br />
-                                    <ul>
-                                        <li ng-repeat="header in session.ApiResponse.Headers">
-                                            <strong>{{ header.Key }}:</strong> {{ header.Value }}
-                                        </li>
-                                    </ul>
-                                    <strong>
-                                        Body
-                                    </strong>
-                                    <br />
-                                    <pre class="pre-scrollable">{{ session.ApiResponse.BodyContent }}</pre>
+                                    <p>
+                                        <strong class="text-info">
+                                            Uri Accessed
+                                        </strong><br />
+                                        {{ session.ApiResponse.UriAccessed }}
+
+                                    </p>
+                                    <p>
+                                        <strong class="text-info">
+                                            Headers
+                                        </strong>
+                                        <br />
+
+                                        <ul>
+                                            <li ng-repeat="header in session.ApiResponse.Headers">
+                                                <strong>{{ header.Key }}:</strong> {{ header.Value }}
+                                            </li>
+                                        </ul>
+                                    </p>
+                                    <p>
+                                        <strong class="text-info">
+                                            Body
+                                        </strong>
+                                        <br />
+                                        <pre class="pre-scrollable">{{ session.ApiResponse.BodyContent }}</pre>
+                                    </p>
                                 </div>
                             </div>
                         </div>

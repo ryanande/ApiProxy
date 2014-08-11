@@ -10,6 +10,7 @@
         'jquery': '../Scripts/jquery-2.1.1.min',
         'bootstrap': '../Scripts/bootstrap.min',
         'linq': '../Scripts/linq.min',
+        'moment': '../Scripts/moment.min',
 
         'HomeCtrl': 'controllers/HomeCtrl',
         'ErrorCtrl': 'controllers/ErrorCtrl',
@@ -44,4 +45,8 @@
         }
     },
     deps: ['app']
+});
+
+define(["moment"], function (moment) {
+    moment().format();
 });

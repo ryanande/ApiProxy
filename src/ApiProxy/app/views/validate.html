@@ -1,1 +1,36 @@
 ﻿<h1>{{ pageTitle }}</h1>
+
+<div class="panel-group" id="accordian">
+    <div ng-repeat="case in validationCases">
+        <div class="panel panel-info">
+            <div class="panel-heading accordion-toggle collapsed" data-toggle="collapse" data-target="#panel_{{ case.UseCaseId }}">
+                <strong>
+
+                    {{ case.Title }}
+
+                </strong>
+
+            </div>
+            <div id="panel_{{ case.UseCaseId }}" class="panel-collapse collapse">
+                <div class="panel-body">
+                    {{ case.Description }}
+                    <br />
+                    <br />
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="item in case.Items">
+                            <span ng-class="getLabel(session.ApiResponse.IsSuccessStatusCode)">
+                                <span ng-class="getIcon(session.ApiResponse.IsSuccessStatusCode)"></span>
+                                &nbsp;
+                                {{ item.Method }}
+                            </span>&nbsp;
+                            {{ item.Path }}
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+</div>

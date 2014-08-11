@@ -14,6 +14,7 @@ define(['app'], function (app) {
         $scope.urlPath = getUrlPath;
         $scope.getLabel = getLabel;
         $scope.getIcon = getIcon;
+        $scope.formatDate = formatDate;
 
         $scope.searchClick = getSessions;
 
@@ -27,8 +28,7 @@ define(['app'], function (app) {
                 $log.error(err);
             });
         }
-
-
+        
 
         function sessionCount() {
             return $scope.sessions.length;
@@ -36,12 +36,17 @@ define(['app'], function (app) {
 
         function sessionErrors() {
             return $scope.sessions.filter(function (item) { return !item.ApiResponse.IsSuccessStatusCode; }).length;
-        };
+        }
 
         function isInSearch() {
             return $scope.searchText.length > 0;
         }
 
+
+        function formatDate(d) {
+            var s = moment(d).format('MM-DD-YYYY, h:mm:ss a');
+            return s;
+        }
 
         function getUrlPath(url) {
             var path = new URL(url);
@@ -55,6 +60,7 @@ define(['app'], function (app) {
         function getIcon(isSuccess) {
             return isSuccess ? "glyphicon glyphicon-ok" : "glyphicon glyphicon-remove";
         }
+
 
     });
 });
