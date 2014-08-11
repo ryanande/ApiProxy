@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EdFiValidation.ApiProxy.Core.Models
 {
@@ -27,13 +28,18 @@ namespace EdFiValidation.ApiProxy.Core.Models
         {
             return Title;
         }
+
+        public bool Passed
+        {
+            get { return Items.All(i => i.Passed); }
+        }
     }
 
     public class ValidationUseCaseItem : ModelBase
     {
         public string Path { get; set; }
         public string Method { get; set; }
-        public bool IsPassed { get; set; }
+        public bool Passed { get; set; }
         
         public override string ToString()
         {

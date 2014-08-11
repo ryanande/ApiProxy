@@ -9,6 +9,7 @@ namespace EdFiValidation.ApiProxy.Models
         public Guid UseCaseId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public bool Passed { get; set; }
         public List<ValidationCaseItemModel> Items { get; set; } 
 
     }
@@ -17,6 +18,6 @@ namespace EdFiValidation.ApiProxy.Models
     {
         public string Path { get; set; }
         public string Method { get; set; }
-        public bool IsPassed { get; set; }
+        public bool Passed { get; set; }
     }
 }

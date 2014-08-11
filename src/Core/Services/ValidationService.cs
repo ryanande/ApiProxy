@@ -44,7 +44,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
                                              Id = i.Id,
                                              Path = i.Path,
                                              Method = i.Method,
-                                             IsPassed = requestResponses.Any(rr => string.Equals(new Uri(rr.ApiResponse.UriAccessed).AbsolutePath, i.Path, StringComparison.CurrentCultureIgnoreCase) &&
+                                             Passed = requestResponses.Any(rr => string.Equals(new Uri(rr.ApiResponse.UriAccessed).AbsolutePath, i.Path, StringComparison.CurrentCultureIgnoreCase) &&
                                              string.Equals(rr.ApiRequest.HttpMethod, i.Method, StringComparison.CurrentCultureIgnoreCase) &&
                                              ((int)rr.ApiResponse.ResponseStatusCode).ToString(CultureInfo.InvariantCulture).StartsWith("20"))
                                          }).ToList()
@@ -52,7 +52,7 @@ namespace EdFiValidation.ApiProxy.Core.Services
 
 
             var enumerable = validationUseCases as ValidationUseCase[] ?? validationUseCases.ToArray();
-            var passed = enumerable.Where(c => c.Items.Count == c.Items.Count(i => i.IsPassed)).Select(v =>
+            var passed = enumerable.Where(c => c.Items.Count == c.Items.Count(i => i.Passed)).Select(v =>
                 new UseCase
                     {
                         Id = v.Id,

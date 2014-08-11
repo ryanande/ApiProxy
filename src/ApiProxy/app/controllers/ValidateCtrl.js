@@ -33,8 +33,7 @@ define(['app'], function (app) {
         function getIcon(isSuccess) {
             return isSuccess ? "glyphicon glyphicon-ok" : "glyphicon glyphicon-remove";
         }
-
-
+        
 
         validateSession();
     });
