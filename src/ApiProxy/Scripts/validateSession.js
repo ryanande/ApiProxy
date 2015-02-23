@@ -10,12 +10,28 @@ var viewModel = function () {
     this.requestCount = ko.observable(0);
     this.errorCount = ko.observable(0);
     this.validUseCases = ko.observableArray([]);
-    
+    self.loadData();
 };
 
 viewModel.prototype.loadData = function () {
+    var self = this;
+    self.isLoading(true);
 
-   
+    $.ajax({
+        type: 'GET',
+        url: '/validateRun/' + self.sessionId(),
+        dataType: 'json',
+        success: function (result) {
+            self.requestCount(result.TotalRequests);
+            self.errorCount(result.RequestErrors);
+        },
+        error: function (jqXHR, textStatus, errorThrow) {
+            self.isLoading(false);
+            toastr.error(errorThrow, "Err");
+        }
+    }).done(function () {
+        self.isLoading(false);
+    });
 }
 
 viewModel.prototype.runValidation = function () {
@@ -25,10 +41,11 @@ viewModel.prototype.runValidation = function () {
 
     $.ajax({
         type: 'GET',
-        url: '/api/validationRun/' + self.sessionId(),
+        url: '/ValidationRun/Execute/' + self.sessionId(),
         dataType: 'json',
         success: function (result) {
-            self.validUseCases(ko.mapping.fromJS(result));
+            var i = ko.mapping.fromJS(result);
+            self.validUseCases(i);
             toastr.success("Loaded validation use case results", "Success!");
         },
         error: function (jqXHR, textStatus, errorThrow) {

@@ -23,7 +23,7 @@ namespace Database
             // objectfactory is being deprecated in 4.0
             var container = AbsFactory.GetContainer();
 
-            
+
             switch (options.PopulationActionValue)
             {
                 case PopulationAction.Create:
@@ -33,6 +33,13 @@ namespace Database
 
                     var createTasks = container.GetAllInstances<ICreateTask>();
                     createTasks.ToList().ForEach(task => task.Execute(Console.WriteLine));
+
+                    break;
+
+                case PopulationAction.CreateForTesting:
+
+                    var testCreateTask = container.GetAllInstances<ICreateForTestingTask>();
+                    testCreateTask.ToList().ForEach(task => task.Execute(Console.WriteLine));
 
                     break;
 

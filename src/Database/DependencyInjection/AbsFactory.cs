@@ -17,6 +17,7 @@ namespace Database.DependencyInjection
                 scan.LookForRegistries();
                 scan.AddAllTypesOf<ICreateTask>();
                 scan.AddAllTypesOf<IUpdateTask>();
+                scan.AddAllTypesOf<ICreateForTestingTask>();
                 scan.ConnectImplementationsToTypesClosing(typeof (IDataList<>));
             }));
 

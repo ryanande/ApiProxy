@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using EdFiValidation.ApiProxy.Core.Commands;
 using EdFiValidation.ApiProxy.Core.Handlers;
@@ -24,33 +24,60 @@ namespace EdFiValidation.ApiProxy.Core.Services
             _useCaseQueryService = useCaseQueryService;
             _commandHandler = commandHandler;
         }
-        public IEnumerable<UseCase> Validate(string sessionId)
+        public IEnumerable<ValidationUseCase> Validate(string sessionId)
         {
             var requestResponses = _requestResponsePairQueryService.GetOnSessionId(sessionId);
             var useCases = _useCaseQueryService.GetAll();
 
 
-            // this is a very niaeve stab at the mathing rule.
-            var passedUseCases = (from useCase in useCases
-                                  let correctCounter = useCase.Items.Count(item => 
-                                      requestResponses.Any(r => 
-                                          string.Equals(r.ApiRequest.UriAccessed, item.Path, StringComparison.CurrentCultureIgnoreCase) && // path and
-                                          string.Equals(r.ApiRequest.HttpMethod, item.Method, StringComparison.CurrentCultureIgnoreCase))) // method
-                                  where correctCounter == useCase.Items.Count
-                                  select useCase).ToList();
+            // this is the lameist code I have ever written
 
 
-            // persist the successes for the session (log em).
-            if (passedUseCases.Count > 0)
-                _commandHandler.Handle(new CreateUseCaseValidation
-                {
-                    Id = CombGuid.Generate(),
-                    ClientId = Guid.Empty,
-                    SessionId = sessionId,
-                    Cases = passedUseCases
-                });
+            var validationUseCases = from uc in useCases
+                                     select new ValidationUseCase
+                                     {
+                                         Id = uc.Id,
+                                         Title = uc.Title,
+                                         Description = uc.Description,
+                                         Items = uc.Items.Select(i => new ValidationUseCaseItem
+                                         {
+                                             Id = i.Id,
+                                             Path = i.Path,
+                                             Method = i.Method,
+                                             Passed = requestResponses.Any(rr => string.Equals(new Uri(rr.ApiResponse.UriAccessed).AbsolutePath, i.Path, StringComparison.CurrentCultureIgnoreCase) &&
+                                             string.Equals(rr.ApiRequest.HttpMethod, i.Method, StringComparison.CurrentCultureIgnoreCase) &&
+                                             ((int)rr.ApiResponse.ResponseStatusCode).ToString(CultureInfo.InvariantCulture).StartsWith("20"))
+                                         }).ToList()
+                                     };
 
-            return passedUseCases;
+
+            var enumerable = validationUseCases as ValidationUseCase[] ?? validationUseCases.ToArray();
+            var passed = enumerable.Where(c => c.Items.Count == c.Items.Count(i => i.Passed)).Select(v =>
+                new UseCase
+                    {
+                        Id = v.Id,
+                        Title = v.Title,
+                        Description = v.Description,
+                        Items = v.Items.Select(vi => new UseCaseItem
+                        {
+                            Id = vi.Id,
+                            Method = vi.Method,
+                            Path = vi.Path
+                        }).ToList()
+                    }
+                );
+
+
+            _commandHandler.Handle(new CreateUseCaseValidation
+            {
+                Id = CombGuid.Generate(),
+                ClientId = Guid.Empty,
+                SessionId = sessionId,
+                Cases = passed.ToList()
+            });
+
+
+            return enumerable;
         }
     }
 }

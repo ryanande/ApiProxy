@@ -38,20 +38,20 @@ namespace Database.Data
                     Description = "Test validation use case meta data.",
                     IsOrdered = false,
                     Items = new List<UseCaseItem> {
-                                new UseCaseItem {
-                                    Id = new Guid("6e9f64f5-4791-4442-8717-a372003f7f04"),
-                                    Path = "/parent",
-                                    Method = "POST"
-                                },
+                                //new UseCaseItem {
+                                //    Id = new Guid("6e9f64f5-4791-4442-8717-a372003f7f04"),
+                                //    Path = "/2014/students/fakeid-abc",
+                                //    Method = "GET"
+                                //},
+                                //new UseCaseItem {
+                                //    Id = new Guid("229793ab-1844-4329-9c7c-a372003f7f04"),
+                                //    Path = "/identities",
+                                //    Method = "POST"
+                                //},
                                 new UseCaseItem {
                                     Id = new Guid("229793ab-1844-4329-9c7c-a372003f7f04"),
-                                    Path = "/parent",
-                                    Method = "POST"
-                                },
-                                new UseCaseItem {
-                                    Id = new Guid("45a4b95a-b7ea-4a9b-b54f-a372003f7f04"),
-                                    Path = "/parent",
-                                    Method = "POST" 
+                                    Path = "/api/v1.0/2014/schools",
+                                    Method = "GET"
                                 }
                     }
                 }

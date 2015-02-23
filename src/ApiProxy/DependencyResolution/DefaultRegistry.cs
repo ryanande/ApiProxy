@@ -15,6 +15,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using EdFiValidation.ApiProxy.Helpers;
+
 namespace EdFiValidation.ApiProxy.DependencyResolution {
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
@@ -30,6 +32,7 @@ namespace EdFiValidation.ApiProxy.DependencyResolution {
                     scan.Assembly("EdFiValidation.ApiProxy.Core");
                 });
             //For<IExample>().Use<Example>();
+            For<IUiModelMapper>().Use<UiModelMapper>();
         }
 
         #endregion
